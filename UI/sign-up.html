@@ -6,15 +6,21 @@
     <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
   </head>
   <body>
-    <form class="column form-layout ">
+    <form action="/action_page.php" class="column form-layout ">
       <input type="text" name="name" placeholder="Name" />
       <input type="number" name="phonenumber" placeholder="Phone Number" />
       <input type="email" name="email" placeholder="Email" />
       <input type="password" name="password" placeholder="Password" />
       <input type="password" name="password" placeholder="Repeat Password" />
-      <input type="submit" value="Create Account" class="btn" />
+      <input
+        type="submit"
+        value="Create Account"
+        class="btn btn-success"
+        id="createAccount"
+      />
       <p class="mx-auto mt-3">Already have an account?</p>
       <p class="mx-auto"><a href="./log-in.html">Log In</a></p>
     </form>
   </body>
+  <script src="./main.js"></script>
 </html>
