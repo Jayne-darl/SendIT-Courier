@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>user Dashboard</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="../styles/style.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+  <body>
+    <header class="navbar col-12">
+      <div class="row">
+        <ul class="list-unstyled row col-4 justify-content-evenly">
+          <li class="">
+            <a href="./user-dashboard.html">
+              Home
+            </a>
+          </li>
+          <li class="">
+            <a href="#">
+              How it Works
+            </a>
+          </li>
+          <li class="">
+            <a href="#">
+              About us
+            </a>
+          </li>
+          <li class="">
+            <a href="#">
+              Contact
+            </a>
+          </li>
+        </ul>
+        <div class="col-5"></div>
+        <div class="row col-3 justify-content-end">
+          <form action="/action_page.php" class="ml-5 mt-2 d-inline">
+            <input type="search" placeholder="Search.." name="search" />
+            <!-- <button><i class="fa fa-search"></i></button> -->
+          </form>
+          <img
+            class="ml-2 img-thumbnail"
+            src="https://avatars1.githubusercontent.com/u/42867330?s=400&u=6da66e2d5b1918f86c51770518bbbb34936b29e4&v=4"
+          />
+        </div>
+      </div>
+    </header>
+    <main class="mx-5 my-5 ">
+      <div class="row">
+        <div class="col-9"></div>
+        <div class="col-3">
+          <button id="trackOrder" class="btn btn-primary ">
+            <a href="#">Track Order</a>
+          </button>
+        </div>
+      </div>
+      <div class="detail form-layout">
+        <h2 class="my-3 mb-5">Delivery Order Detail</h2>
+        <p>
+          <span class="title">Order ID: </span
+          ><span class="info" id="orderId">1</span>
+        </p>
+        <p>
+          <span class="title">Parcel Name: </span
+          ><span class="info" id="parcelName">bags</span>
+        </p>
+        <p>
+          <span class="title">Location of Order Placement: </span
+          ><span class="info" id="locationOfOrderPlacement">Ogun</span>
+        </p>
+        <P
+          ><span class="title">Current Location: </span
+          ><span class="info" id="currentLocation">Oworoshoki</span></P
+        >
+        <p>
+          <span class="title">Destination: </span
+          ><span class="info" id="destination">Lekki Island</span>
+        </p>
+        <p>
+          <span class="title">Parcel Weight: </span
+          ><span class="info" id="parcelWeight">20kg</span>
+        </p>
+        <p>
+          <span class="title">Approximate Price: </span
+          ><span class="info" id="price">245 NGN</span>
+        </p>
+        <p>
+          <span class="title">Order Status: </span
+          ><span class="info" id="status">In Transit</span>
+        </p>
+        <div class="mt-5 my-4" align="right">
+          <button class="btn btn-danger">Cancel Order</button>
+          <button class="btn btn-success">Change Destination</button>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>

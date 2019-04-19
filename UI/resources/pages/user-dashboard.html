@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>user Dashboard</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="../styles/style.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+  <body>
+    <header class="navbar col-12">
+      <div class="row">
+        <ul class="list-unstyled row col-4 justify-content-evenly">
+          <li class="">
+            <a href="./user-dashboard.html">
+              Home
+            </a>
+          </li>
+          <li class="">
+            <a href="#">
+              How it Works
+            </a>
+          </li>
+          <li class="">
+            <a href="#">
+              About us
+            </a>
+          </li>
+          <li class="">
+            <a href="#">
+              Contact
+            </a>
+          </li>
+        </ul>
+        <div class="col-5"></div>
+        <div class="row col-3 justify-content-end">
+          <form action="/action_page.php" class="ml-5 mt-2 d-inline">
+            <input type="search" placeholder="Search.." name="search" />
+            <!-- <button><i class="fa fa-search"></i></button> -->
+          </form>
+          <img
+            class="ml-2 img-thumbnail"
+            src="https://avatars1.githubusercontent.com/u/42867330?s=400&u=6da66e2d5b1918f86c51770518bbbb34936b29e4&v=4"
+          />
+        </div>
+      </div>
+    </header>
+    <main class="mx-5 my-5">
+      <section class="row">
+        <div class="col-10"></div>
+        <div class="col-2">
+          <button class="btn btn-primary">
+            <a href="new-delivery-order.html">Create Order</a>
+          </button>
+        </div>
+      </section>
+      <section id="parcelDisplay">
+        <div>
+          <table class="m-auto">
+            <caption>
+              <h2>All Parcel Delivery Orders</h2>
+            </caption>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>PARCEL NAME</th>
+                <th>CURRENT LOCATION</th>
+                <th>DESTINATION</th>
+                <th>STATUS</th>
+                <th>DETAILS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Shoes</td>
+                <td>Lagos</td>
+                <td>Abuja</td>
+                <td>pending</td>
+                <td>
+                  <button class="btn btn-secondary">
+                    <a href="./order-detail.html">View Details</a>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Wedding Documents</td>
+                <td>Nasarawa</td>
+                <td>Ibadan</td>
+                <td>Delivered</td>
+                <td>
+                  <button class="btn btn-secondary">
+                    <a href="./order-detail.html">View Details</a>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Pack of matches</td>
+                <td>Kwara</td>
+                <td>Imo</td>
+                <td>Delivered</td>
+                <td>
+                  <button class="btn btn-secondary">
+                    <a href="./order-detail.html">View Details</a>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>books</td>
+                <td>Enugu</td>
+                <td>Abuja</td>
+                <td>pending</td>
+                <td>
+                  <button class="btn btn-secondary">
+                    <a href="./order-detail.html">View Details</a>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <footer></footer>
+  </body>
+  <script src="./main.js"></script>
+</html>
