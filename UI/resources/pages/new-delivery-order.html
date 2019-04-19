@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <title>user Dashboard</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="../styles/style.css"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -14,7 +19,7 @@
       <div class="row">
         <ul class="list-unstyled row col-4 justify-content-evenly">
           <li class="">
-            <a href="#">
+            <a href="./user-dashboard.html">
               Home
             </a>
           </li>
@@ -53,6 +58,15 @@
         method="Post"
         class="column form-layout form-new-parcel "
       >
+        <h2 class="mb-4" align="center">New Delivery Order Form</h2>
+        <input id="name" type="text" name="name" placeholder="Name of Parcel" />
+        <input
+          id="number"
+          type="number"
+          name="phonenumber"
+          placeholder="Approximate weight in Kilograms"
+        />
+
         <input
           id="name"
           type="text"
@@ -63,7 +77,7 @@
           id="number"
           type="number"
           name="phonenumber"
-          placeholder="Phone Number"
+          placeholder=" Receiver's Phone Number"
         />
         <input
           id="destination"
@@ -80,27 +94,20 @@
           type="text"
           rows="6"
           name="description"
-          placeholder="Briefly Description of Parcel Content"
+          placeholder="Brief Description of Parcel Content"
         ></textarea>
-        <div class="row justify-content-end my-3">
-          <input
-            type="submit"
-            value="Cancel"
-            class="btn btn-danger "
-            id="cancelDelivery"
-          />
-          <input
-            type="submit"
-            value="Submit"
-            class="btn btn-success"
-            id="createDelivery"
-          />
-        </div>
+
+        <input
+          type="submit"
+          value="Create Delivery Order"
+          class="btn btn-success my-4"
+          id="createOrder"
+        />
         <!-- <p class="mx-auto mt-3">Already have an account?</p>
                     <p class="mx-auto"><a href="./log-in.html">Log In</a></p> -->
       </form>
     </main>
     <footer></footer>
   </body>
-  <script src="./main.js"></script>
+  <script src="../../js/new-delivery-order.js"></script>
 </html>
