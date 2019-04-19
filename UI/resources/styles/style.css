@@ -102,6 +102,10 @@ a:focus {
   -ms-flex-pack: distribute !important;
   justify-content: space-between !important;
 }
+.justify-content-space-around {
+  -ms-flex-pack: distribute !important;
+  justify-content: space-around !important;
+}
 .align-self-end {
   -ms-flex-pack: distribute !important;
   align-self: flex-end !important;
@@ -254,6 +258,8 @@ input[type="search"] {
 .d-inline {
   display: inline;
 }
+
+/* From Bootstrap css file */
 .m-0 {
   margin: 0 !important;
 }
@@ -789,4 +795,43 @@ td {
     margin-bottom: 2rem;
     margin-left: 2rem;
   }
+}
+.container {
+  margin-right: 2rem;
+}
+.order-title {
+  font-weight: 600;
+  color: #034f84;
+}
+.orders {
+  margin-left: 0.5rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid gray;
+  padding: 0.2rem;
+}
+.orderLink:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  right: 0;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }

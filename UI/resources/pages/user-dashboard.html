@@ -45,16 +45,48 @@
             <input type="search" placeholder="Search.." name="search" />
             <!-- <button><i class="fa fa-search"></i></button> -->
           </form>
-          <img
-            class="ml-2 img-thumbnail"
-            src="https://avatars1.githubusercontent.com/u/42867330?s=400&u=6da66e2d5b1918f86c51770518bbbb34936b29e4&v=4"
-          />
+          <div class="dropdown">
+            <img
+              class="ml-2 img-thumbnail"
+              src="https://avatars1.githubusercontent.com/u/42867330?s=400&u=6da66e2d5b1918f86c51770518bbbb34936b29e4&v=4"
+            />
+            <div class="dropdown-content">
+              <p><a href="#">My Orders</a></p>
+              <p><a href="#">All Orders</a></p>
+              <p><a href="../../index.html">Log Out</a></p>
+            </div>
+          </div>
         </div>
       </div>
     </header>
-    <main class="mx-5 my-5">
-      <section class="row">
-        <div class="col-10"></div>
+    <main class="mx-3 my-5">
+      <section class="row mb-4">
+        <div class="col-10 container row justify-content-space-around">
+          <div>
+            <a href="#" class="orderLink"
+              ><i class="fa fa-gift"></i>
+              <span class="order-title">Total Orders</span></a
+            ><span id="totalOrders" class="orders">5</span>
+          </div>
+          <div>
+            <a href="#" class="orderLink"
+              ><i class="fa fa-check-square-o"></i>
+              <span class="order-title">Delivered Orders</span></a
+            ><span id="delivered" class="orders">6</span>
+          </div>
+          <div>
+            <a href="#" class="orderLink"
+              ><i class="fa fa-truck"></i>
+              <span class="order-title">In Transit Orders</span></a
+            ><span id="transit" class="orders">7</span>
+          </div>
+          <div>
+            <a href="#" class="orderLink"
+              ><i class="fa fa-ban"></i>
+              <span class="order-title">Cancelled Orders</span></a
+            ><span id="cancelled" class="orders">7</span>
+          </div>
+        </div>
         <div class="col-2">
           <button class="btn btn-primary">
             <a href="new-delivery-order.html">Create Order</a>
@@ -65,7 +97,7 @@
         <div>
           <table class="m-auto">
             <caption>
-              <h2>All Parcel Delivery Orders</h2>
+              <h3>All Parcel Delivery Orders</h3>
             </caption>
             <thead>
               <tr>
