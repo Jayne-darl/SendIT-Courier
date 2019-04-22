@@ -860,9 +860,10 @@ td {
   border-radius: 1rem;
   width: 40%; /* Could be more or less, depending on screen size */
 }
-.new-destination {
+.change-field {
   padding: 0.5rem;
   margin: 0rem;
+  border: 0;
 }
 @media only screen and (max-width: 1024px) {
 .modal-content {
