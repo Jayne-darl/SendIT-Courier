@@ -97,10 +97,40 @@
         </p>
         <div class="mt-5 my-4" align="right">
           <button class="btn btn-danger">Cancel Order</button>
-          <button class="btn btn-success">Change Destination</button>
+          <button class="btn btn-success" id="changeOrderDestination">
+            Change Destination
+          </button>
+        </div>
+      </div>
+      <div id="myModal" class="modal">
+        <div class="modal-content detail">
+          <h2 class="my-4">Parcel Destination Change</h2>
+          <p>
+            <span class="title">Order ID: </span
+            ><span class="info" id="orderId">1</span>
+          </p>
+          <p>
+            <span class="title">Parcel Name: </span
+            ><span class="info" id="parcelName">bags</span>
+          </p>
+          <p>
+            <span class="title">Current Destination:</span
+            ><span class="info" id="destination">Lekki Island</span>
+          </p>
+          <p>
+            <span class="title">Preferred Destination:</span>
+            <input
+              type="text"
+              name="new Destination"
+              class="new-destination info"
+            />
+          </p>
+          <button id="submit" class="btn btn-success my-4 close">Submit</button>
         </div>
       </div>
     </main>
+
     <footer></footer>
+    <script src="../../js/changeDestinatiton.js"></script>
   </body>
 </html>
