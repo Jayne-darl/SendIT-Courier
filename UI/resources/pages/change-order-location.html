@@ -10,6 +10,10 @@
       href="../styles/style.css"
     />
     <link
+      href="https://fonts.googleapis.com/css?family=Cardo|Dancing+Script"
+      rel="stylesheet"
+    />
+    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
@@ -17,6 +21,9 @@
   <body>
     <header class="navbar col-12">
       <div class="row">
+        <h1 class="ml-3 logo col-1">
+          <a href="./admin-dashboard.html">SendIT</a>
+        </h1>
         <ul class="list-unstyled row col-4 justify-content-evenly">
           <li class="">
             <a href="./admin-dashboard.html">
@@ -29,17 +36,17 @@
             </a>
           </li>
           <!-- <li class="">
-            <a href="#">
-              About us
-            </a>
-          </li> -->
+                <a href="#">
+                  About us
+                </a>
+              </li> -->
           <li class="">
             <a href="#">
               Contact
             </a>
           </li>
         </ul>
-        <div class="col-5"></div>
+        <div class="col-4"></div>
         <div class="row col-3 justify-content-end">
           <form action="/action_page.php" class="ml-5 mt-2 d-inline">
             <input type="search" placeholder="Search.." name="search" />
@@ -85,8 +92,15 @@
         </button>
       </div>
     </main>
-
-    <footer></footer>
+    <footer class="footer" align="center">
+      <div><p class="pt-3 mb-0">Jane Onwumere Copyright©2019</p></div>
+      <nav>
+        <ul class="footer-items">
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">FAQs</a></li>
+        </ul>
+      </nav>
+    </footer>
     <script src="../../js/changeLocation.js"></script>
   </body>
 </html>
