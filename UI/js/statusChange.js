@@ -1,18 +1,28 @@
 // Get the modal
-var modal = document.getElementById("myModal");
+let modal = document.getElementById("myModal");
+let status = document.getElementById("orderStatus");
 
 // Get the button that opens the modal
-var btn = document.getElementById("changeOrderStatus");
+let btn = document.getElementById("changeOrderStatus");
 
 // Get the <span> element that closes the modal
-var submit = document.getElementsByClassName("close")[0];
+let submit = document.getElementsByClassName("close")[0];
+// if (containsClass) {
+// }
+status.onchange = function(event) {
+  status.innerText = event.target.value;
+  // status.onclick = function() {
+  //   // let status = document.createElement("SPAN");
+  //   status.value = status.innerText;
+  //   // document.body.appendChild("stat");
+  // };
+};
 
 // When the user clicks on the button, open the modal
 btn.onclick = function() {
   modal.style.display = "block";
 };
 
-// When the user clicks on <span> (x), close the modal
 submit.onclick = function() {
   modal.style.display = "none";
 };

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Admin Dashboard</title>
+    <title>Change Order Location</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -53,14 +53,6 @@
       </div>
     </header>
     <main class="mx-5 my-5 ">
-      <div class="row">
-        <div class="col-9"></div>
-        <div class="col-3">
-          <button id="orderLocation" class="btn btn-primary ">
-            <a href="./change-order-location.html">Change Order Location</a>
-          </button>
-        </div>
-      </div>
       <div class="detail form-layout">
         <h2 class="my-3 mb-5">Delivery Order Detail</h2>
         <p>
@@ -77,69 +69,24 @@
         </p>
         <P
           ><span class="title">Current Location: </span
-          ><span class="info" id="currentLocation">Oworoshoki</span></P
-        >
+          ><input
+            id="currentLocation"
+            class="change-field info"
+            placeholder="Enter Current Location"
+        /></P>
+
         <p>
           <span class="title">Destination: </span
           ><span class="info" id="destination">Lekki Island</span>
         </p>
-        <p>
-          <span class="title">Parcel Weight: </span
-          ><span class="info" id="parcelWeight">20kg</span>
-        </p>
-        <p>
-          <span class="title">Approximate Price: </span
-          ><span class="info" id="price">245 NGN</span>
-        </p>
-        <p>
-          <span class="title">Order Status: </span
-          ><span class="info" id="status">In Transit</span>
-        </p>
-        <div class="mt-5 my-4" align="right">
-          <!-- <button class="btn btn-danger">Change Order Location</button> -->
-          <button class="btn btn-success" id="changeOrderStatus">
-            Change Order Status
-          </button>
-        </div>
-      </div>
-      <div id="myModal" class="modal">
-        <div class="modal-content detail">
-          <h2 class="my-4">Order Status Change</h2>
-          <p>
-            <span class="title">Order ID: </span
-            ><span class="info" id="orderId">1</span>
-          </p>
-          <p>
-            <span class="title">Parcel Name: </span
-            ><span class="info" id="parcelName">bags</span>
-          </p>
-          <p>
-            <span class="title">Current Status:</span
-            ><span class="info" id="status">pending</span>
-          </p>
-          <p>
-            <span class="title">New Status:</span>
-            <span class="info" id="orderStatus">
-              <input
-                type="radio"
-                name="new status"
-                value="In transit"
-                class=""
-              />In transit
-              <input
-                type="radio"
-                name="new status"
-                value="delivered"
-                class=""
-              />Delivered
-            </span>
-          </p>
-          <button id="submit" class="btn btn-success my-4 close">Submit</button>
-        </div>
+
+        <button class="btn btn-success my-4" id="changeOrderLocation">
+          Update
+        </button>
       </div>
     </main>
 
     <footer></footer>
-    <script src="../../js/statusChange.js"></script>
+    <script src="../../js/changeLocation.js"></script>
   </body>
 </html>
