@@ -13,10 +13,10 @@
       href="https://fonts.googleapis.com/css?family=Cardo|Dancing+Script"
       rel="stylesheet"
     />
-    <link
+    <!-- <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    /> -->
   </head>
   <body>
     <header class="navbar col-12">
@@ -60,37 +60,10 @@
       </div>
     </header>
     <main class="mx-5 my-5 ">
-      <!-- <div class="detail form-layout">
-        <h2 class="my-3 mb-5">Delivery Order Detail</h2>
-        <p>
-          <span class="title">Order ID: </span
-          ><span class="info" id="orderId">1</span>
-        </p>
-        <p>
-          <span class="title">Parcel Name: </span
-          ><span class="info" id="parcelName">bags</span>
-        </p>
-        <p>
-          <span class="title">Location of Order Placement: </span
-          ><span class="info" id="locationOfOrderPlacement">Ogun</span>
-        </p>
-        <P
-          ><span class="title">Current Location: </span
-          ><input
-            id="currentLocation"
-            class="change-field info"
-            placeholder="Enter Current Location"
-        /></P>
-
-        <p>
-          <span class="title">Destination: </span
-          ><span class="info" id="destination">Lekki Island</span>
-        </p>
-
-        <button class="btn btn-success my-4" id="changeOrderLocation">
-          Update
-        </button>
-      </div> -->
+      <h3>Tracker for Delivery Order 1</h3>
+      <!--The div element for the map -->
+      <div id="map"></div>
+      <!-- Replace the value of the key parameter with your own API key. -->
     </main>
     <footer class="footer" align="center">
       <div><p class="pt-3 mb-0">Jane Onwumere Copyright©2019</p></div>
@@ -101,6 +74,25 @@
         </ul>
       </nav>
     </footer>
-    <script src="../../js/changeLocation.js"></script>
+    <script>
+      // Initialize and add the map
+      function initMap() {
+        // The location of Uluru
+        var uluru = { lat: -25.344, lng: 131.036 };
+        // The map, centered at Uluru
+        var map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 4,
+          center: uluru
+        });
+        // The marker, positioned at Uluru
+        var marker = new google.maps.Marker({ position: uluru, map: map });
+      }
+    </script>
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAcS5sAMDwTIBpITCK_Qqwo8TMGlQ0iPfw&callback=initMap"
+      type="text/javascript"
+    ></script>
   </body>
 </html>

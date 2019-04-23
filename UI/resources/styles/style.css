@@ -34,13 +34,13 @@ header {
   box-shadow: 0px 1px 3px 0px #ddd;
 }
 .logo {
-  font-family: 'Cardo', serif;
+  font-family: "Cardo", serif;
 }
 main {
   /* height: 80vh; */
   flex: 1 0 auto;
   padding: 0 2rem;
-  padding-bottom: 6rem
+  padding-bottom: 6rem;
 }
 h1,
 h2,
@@ -873,11 +873,10 @@ td {
   border: 0;
 }
 @media only screen and (max-width: 1024px) {
-.modal-content {
-  width:50%;
-  margin: 15% auto;
-
-}
+  .modal-content {
+    width: 50%;
+    margin: 15% auto;
+  }
 }
 footer {
   width: 100%;
@@ -894,5 +893,9 @@ footer {
   margin-top: 0;
 }
 .logo a:hover {
-  text-decoration: none
+  text-decoration: none;
+}
+#map {
+  height: 30rem;
+  width: 100%;
 }
