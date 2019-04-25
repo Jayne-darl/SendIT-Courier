@@ -14,9 +14,9 @@ env:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - bundle exec rspec
+  - npm install
 after_script:
    -npm run test
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
-  after_success: npm run coverage
+after_success: npm run coverage
