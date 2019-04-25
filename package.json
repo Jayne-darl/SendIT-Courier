@@ -16,17 +16,17 @@
     "chai": "^4.2.0",
     "coveralls": "^3.0.3",
     "eslint": "^5.16.0",
+    "istanbul": "^0.4.5",
     "mocha": "^6.1.4",
-    "mocha-lcov-reporter": "^1.3.0",
     "nodemon": "^1.18.11",
     "nyc": "^14.0.0"
   },
   "scripts": {
     "start": "nodemon server/index.js --exec babel-node",
     "build": "babel server -d dist",
-    "test": "nyc --reporter=html --reporter=text mocha --require @babel/register --require @babel/polyfill",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls",
-    "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov | coveralls && nyc report --reporter=lcov"
+    "test": " nyc --reporter=html --reporter=text mocha --require @babel/register --require @babel/polyfill",
+    "coveralls": "./node_modules/coveralls/bin/coveralls.js",
+    "coverage": "NODE_ENV=test npm run coveralls -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
