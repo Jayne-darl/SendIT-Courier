@@ -26,7 +26,7 @@
     "build": "babel server -d dist",
     "test": " nyc --reporter=html --reporter=text mocha --require @babel/register --require @babel/polyfill",
     "coveralls": "./node_modules/coveralls/bin/coveralls.js",
-    "coverage": "NODE_ENV=test npm run coveralls -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "coverage": "NODE_ENV=test npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
