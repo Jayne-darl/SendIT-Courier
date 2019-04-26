@@ -7,7 +7,6 @@ cache:
   directories:
     - "node_modules"
 env:
-  - NODE_ENV=test
   - CC_TEST_REPORTER_ID=48f67222fe17df3ccdbaba2713c8b31b79c3acaf0737dd69deef21e7421c4e25
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
