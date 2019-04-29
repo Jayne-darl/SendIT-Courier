@@ -14,6 +14,7 @@
     "@babel/preset-env": "^7.4.3",
     "@babel/register": "^7.4.0",
     "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "coveralls": "^3.0.3",
     "eslint": "^5.16.0",
     "mocha": "^6.1.4",
@@ -23,9 +24,9 @@
   "scripts": {
     "start": "nodemon server/index.js --exec babel-node",
     "build": "babel server -d dist",
-    "test": " nyc --reporter=html --reporter=text mocha --require @babel/register --require @babel/polyfill",
-    "coveralls": "./node_modules/coveralls/bin/coveralls.js",
-    "coverage": "NODE_ENV=test npm run coveralls -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "test": "nyc ./node_modules/.bin/mocha --timeout 100000 --require @babel/register --require @babel/polyfill --exit || true",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "coverage": "nyc report --reporter=text-lcov | coveralls && nyc report --reporter=lcov"
   },
   "repository": {
     "type": "git",
