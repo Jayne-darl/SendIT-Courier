@@ -34,6 +34,13 @@ class Order {
   static getAll() {
     return Order.table;
   }
+  /**
+   * @param(id)
+   * @return {object} order with id
+   */
+  static getOne(id) {
+    return Order.table.find(order => order.id == id);
+  }
 }
 Order.table = db.deliveryOrder;
 Order.count = db.deliveryOrder.length;

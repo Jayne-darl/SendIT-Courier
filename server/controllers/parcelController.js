@@ -61,6 +61,26 @@ const Order = {
         }
       ]
     });
+  },
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} order object
+   */
+  getOne(req, res) {
+    const order = parcelMOdel.getOne(req.params.id);
+    if (!order) {
+      return res.status(404).json({ status: 404, Error: "order not found" });
+    }
+    return res.status(200).json({
+      status: 200,
+      data: [
+        {
+          Order: order,
+          Message: "Successful"
+        }
+      ]
+    });
   }
 };
 export default Order;
