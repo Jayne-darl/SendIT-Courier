@@ -117,3 +117,32 @@ describe("/GET Orders", () => {
       });
   });
 });
+/**
+ * Test the /GET/:id route
+ */
+describe("/GET/:id Order", () => {
+  it("should return not found for an invalid id", done => {
+    Chai.request(app)
+      .get("/api/v1/parcels/9")
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property("Error");
+        res.body.should.have.property("status");
+        res.should.be.json;
+        done();
+      });
+  });
+  it("should return a parcel delivery order with id", done => {
+    Chai.request(app)
+      .get("/api/v1/parcels/4")
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property("data");
+        res.body.should.have.property("status");
+        res.should.be.json;
+        res.body.data[0].should.have.property("Order");
+        res.body.data[0].should.have.property("Message");
+        done();
+      });
+  });
+});
