@@ -24,7 +24,7 @@
   "scripts": {
     "start": "nodemon server/index.js --exec babel-node",
     "build": "babel server -d dist",
-    "test": "nyc ./node_modules/.bin/_mocha --timeout 100000 --require @babel/register --require @babel/polyfill test --exit || true",
+    "test": "nyc --reporter=lcov --reporter=text --cache _mocha  --timeout 100000 --require @babel/register --require @babel/polyfill test --exit || true",
     "coverage": "npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {

@@ -43,6 +43,24 @@ const Order = {
         }
       ]
     });
+  },
+  /**
+   *
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} order array
+   */
+  getAll(req, res) {
+    const orders = parcelMOdel.getAll();
+    return res.status(200).json({
+      status: 200,
+      data: [
+        {
+          AllOrder: orders,
+          Message: "Successful"
+        }
+      ]
+    });
   }
 };
 export default Order;

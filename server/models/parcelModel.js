@@ -28,6 +28,12 @@ class Order {
     Order.table.push(parcel);
     return parcel;
   }
+  /**
+   * @returns {object} all delivery order array
+   */
+  static getAll() {
+    return Order.table;
+  }
 }
 Order.table = db.deliveryOrder;
 Order.count = db.deliveryOrder.length;
