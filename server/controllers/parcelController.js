@@ -68,6 +68,9 @@ const Order = {
    * @returns {object} order object
    */
   getOne(req, res) {
+    if (isNaN(req.params.id)) {
+      return res.status(400).json({ status: 400, Error: "Invalid ID type" });
+    }
     const order = parcelMOdel.getOne(req.params.id);
     if (!order) {
       return res.status(404).json({ status: 404, Error: "order not found" });
@@ -77,6 +80,30 @@ const Order = {
       data: [
         {
           Order: order,
+          Message: "Successful"
+        }
+      ]
+    });
+  },
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} updated order
+   */
+  update(req, res) {
+    if (isNaN(req.params.id)) {
+      return res.status(400).json({ status: 400, Error: "Invalid ID type" });
+    }
+    const order = parcelMOdel.getOne(req.params.id);
+    if (!order) {
+      return res.status(404).json({ status: 404, Error: "order not found" });
+    }
+    const updatedOrder = parcelMOdel.update(req.params.id, req.body);
+    return res.status(200).json({
+      status: 200,
+      data: [
+        {
+          Order: updatedOrder,
           Message: "Successful"
         }
       ]

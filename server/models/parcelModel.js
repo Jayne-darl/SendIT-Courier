@@ -35,11 +35,22 @@ class Order {
     return Order.table;
   }
   /**
-   * @param(id)
+   * @param {id} order id
    * @return {object} order with id
    */
   static getOne(id) {
     return Order.table.find(order => order.id == id);
+  }
+  /**
+   * @param {id} order id
+   * @param {object} data
+   */
+  static update(id, data) {
+    const order = this.getOne(id);
+    const index = Order.table.indexOf(order);
+    Order.table[index].status = data["status"] || order.status;
+    Order.table[index].updatedAt = new Date();
+    return Order.table[index];
   }
 }
 Order.table = db.deliveryOrder;

@@ -11,7 +11,8 @@ const db = {
       destination: "Lagos",
       pickupLocation: "Alaba Intentional",
       descriptioin: "A bag of rice",
-      updatedAt: new Date()
+      status: "pending",
+      updatedAt: ""
     },
     {
       id: 2,
@@ -24,7 +25,8 @@ const db = {
       destination: "Aba",
       pickupLocation: "Ariaria",
       descriptioin: "A pack of an Italian shoe",
-      updatedAt: new Date()
+      status: "delivered",
+      updatedAt: ""
     },
     {
       id: 3,
@@ -37,6 +39,7 @@ const db = {
       destination: "Port Harcourt",
       pickupLocation: "Rumokoro",
       descriptioin: "5 bathroom mirrors",
+      status: "In-transit",
       updatedAt: new Date()
     },
     {
@@ -50,7 +53,8 @@ const db = {
       destination: "Kano",
       pickupLocation: "Peace Avenue",
       descriptioin: "20 bags of dangote cement",
-      updatedAt: new Date()
+      status: " pending",
+      updatedAt: ""
     },
     {
       id: 5,
@@ -63,7 +67,8 @@ const db = {
       destination: "Enugu",
       pickupLocation: "Shoprite Enugu Town",
       descriptioin: "A bail of okirika",
-      updatedAt: new Date()
+      status: "pending",
+      updatedAt: ""
     }
   ]
 };
