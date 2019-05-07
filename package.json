@@ -36,5 +36,8 @@
   "bugs": {
     "url": "https://github.com/Jayne-darl/SendIT-Courier/issues"
   },
+  "engines": {
+    "node": "10.15.1"
+  },
   "homepage": "https://github.com/Jayne-darl/SendIT-Courier#readme"
 }
