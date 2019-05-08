@@ -22,7 +22,7 @@
     "nyc": "^14.0.0"
   },
   "scripts": {
-    "start": "nodemon server/index.js --exec babel-node",
+    "start": "nodemon index.js --exec babel-node",
     "build": "babel server -d dist",
     "test": "nyc --reporter=lcov --reporter=text --cache _mocha  --timeout 100000 --require @babel/register --require @babel/polyfill test --exit || true",
     "coverage": "npm test && nyc report --reporter=text-lcov | coveralls"
