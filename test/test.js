@@ -1,7 +1,7 @@
 import parcelController from "../server/controllers/parcelController";
 import Chai from "chai";
 import ChaiHttp from "chai-http";
-import app from "../index";
+import app from "../server/index";
 
 let should = Chai.should();
 

@@ -1,4 +1,4 @@
-import parcelRoute from "./server/routes/parcel";
+import parcelRoute from "./routes/parcel";
 
 const express = require("express");
 const app = express();
