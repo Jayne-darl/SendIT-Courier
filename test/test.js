@@ -1,4 +1,4 @@
-import parcelController from "../server/controllers/parcelController";
+import parcelController from "../server/UsingJSObject/controllers/parcelController";
 import Chai from "chai";
 import ChaiHttp from "chai-http";
 import app from "../server/index";
