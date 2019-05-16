@@ -1,5 +1,5 @@
 import express from "express";
-import parcelController from "../controllers/parcelController";
+import parcelController from "../UsingJSObject/controllers/parcelController";
 
 let router = express.Router();
 router.use(express.json());
