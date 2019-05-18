@@ -19,6 +19,7 @@ export default {
       pool
         .query(text, params)
         .then(res => {
+          console.log(res);
           resolve(res);
         })
         .catch(err => {
