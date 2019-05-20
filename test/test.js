@@ -73,21 +73,20 @@ describe("Parcel delivery order test", () => {
 /**
  * Test the /GET route
  */
-// describe("/GET Orders", () => {
-//   it("should return all parcel delivery order", done => {
-//     Chai.request(app)
-//       .get("/api/v1/parcels")
-//       .end((err, res) => {
-//         res.should.have.status(200);
-//         res.body.should.have.property("data");
-//         res.body.should.have.property("status");
-//         res.body.data[0].should.have.property("AllOrder");
-//         res.body.data[0].AllOrder.should.be.a("array");
-//         res.body.data[0].should.have.property("Message");
-//         done();
-//       });
-//   });
-// });
+describe("/GET Orders", () => {
+  it("should return all parcel delivery order", done => {
+    Chai.request(app)
+      .get("/api/v1/parcels")
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property("rows");
+        res.body.should.have.property("status");
+        res.body.should.have.property("rowCount");
+        res.body.rows.should.be.a("array");
+        done();
+      });
+  });
+});
 /**
  * Test the /GET/:id route
  */

@@ -34,6 +34,20 @@ const Order = {
         error: `An error occured while trying to save your order ${error}`
       });
     }
+  },
+  async getAll(req, res) {
+      const findAllQuery = 'SELECT * FROM parcel_order';
+      try {
+        const { rows, rowCount } = await db.query(findAllQuery);
+        return res.status(200).json({ 
+            status: res.statusCode,
+            rows, rowCount });
+      } catch(error) {
+        return res.status(400).json({
+            status: res.statusCode,
+            error: `An error occured while trying to save your order ${error}`
+          });
+      }
   }
 };
 // module.exports = {create};

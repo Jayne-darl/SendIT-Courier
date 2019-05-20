@@ -5,7 +5,7 @@ let router = express.Router();
 router.use(express.json());
 
 router.post("/", parcelController.create);
-// router.get("/", parcelController.getAll);
+router.get("/", parcelController.getAll);
 // router.get("/:id", parcelController.getOne);
 // router.patch("/:id", parcelController.update);
 
