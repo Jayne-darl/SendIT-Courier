@@ -35,20 +35,50 @@ const Order = {
       });
     }
   },
+  /**
+   * Get all Parcel Orders
+   * @param {object} req 
+   * @param {object} res 
+   * @returns {object} Parcel Orders Array
+   */
   async getAll(req, res) {
-      const findAllQuery = 'SELECT * FROM parcel_order';
-      try {
-        const { rows, rowCount } = await db.query(findAllQuery);
-        return res.status(200).json({ 
+    const findAllQuery = 'SELECT * FROM parcel_order';
+    try {
+    const { rows, rowCount } = await db.query(findAllQuery);
+    return res.status(200).json({ 
+        status: res.statusCode,
+        rows, rowCount });
+    } catch(error) {
+    return res.status(400).json({
+        status: res.statusCode,
+        error: `An error occured while trying to save your order ${error}`
+        });
+      }
+  },
+  /**
+   * Get a Parcel Order
+   * @Param {object} req
+   * @Param {object} res
+   * @returns {object} parcel object
+   */
+  async getOne(req, res) {
+    const text = 'SELECT * FROM parcel_order WHERE id = $1';
+    try {
+        const { rows } = await db.query(text, [req.params.id]);
+        if (!rows[0]) {
+        return res.status(404).json({
             status: res.statusCode,
-            rows, rowCount });
-      } catch(error) {
+            message: 'delivery order not found'});
+        }
+        return res.status(200).json({
+            status: res.statusCode,
+            data:rows[0]});
+    } catch(error) {
         return res.status(400).json({
             status: res.statusCode,
-            error: `An error occured while trying to save your order ${error}`
-          });
-      }
-  }
+            error: `An error occured while trying to save your order ${error}`})
+    }
+},
 };
 // module.exports = {create};
 export default Order;
