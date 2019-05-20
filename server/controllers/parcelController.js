@@ -79,6 +79,37 @@ const Order = {
             error: `An error occured while trying to save your order ${error}`})
     }
 },
+/**
+ * Update delivery order: Cancel order
+ * @param {object} req
+ * @param {object} res
+ * @returns {object} updated order
+ */
+async update (req, res) {
+    const findOneQuery = 'SELECT * FROM parcel_order WHERE id = $1';
+    const updateOneQuery = `UPDATE parcel_order SET status = $1, updated_at = $2 WHERE id=$3 returning *`;
+    try {
+        const { rows } = await db.query(findOneQuery, [req.params.id]);
+        if(!rows[0]) {
+          return res.status(404).json({
+            status: res.statusCode,
+            message: 'delivery order not found'});
+        }
+        const values = [
+          req.body.status || rows[0].status,
+          new Date(),
+          req.params.id
+        ];
+        const response = await db.query(updateOneQuery, values);
+        return res.status(200).json({
+            status: res.statusCode,
+            data: response.rows[0]});
+      } catch(error) {
+        return res.status(400).json({
+            status: res.statusCode,
+            error: `An error occured while trying to save your order ${error}`})
+    }
+}
 };
 // module.exports = {create};
 export default Order;

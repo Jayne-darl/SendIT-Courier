@@ -131,40 +131,38 @@ describe("/GET/:id Order", () => {
 // /**
 //  * Test the /PATCH/:id/cancel order
 //  */
-// describe("/PATCH/:id Cancel Order", () => {
-//   it("should return invalid id type for a non-integer id ", done => {
-//     Chai.request(app)
-//       .patch("/api/v1/parcels/y")
-//       .end((err, res) => {
-//         res.should.have.status(400);
-//         res.body.should.have.property("status");
-//         res.body.should.have.property("Error");
-//         res.should.be.json;
-//         done();
-//       });
-//   });
-//   it("should return not found for an invalid id", done => {
-//     Chai.request(app)
-//       .patch("/api/v1/parcels/9")
-//       .end((err, res) => {
-//         res.should.have.status(404);
-//         res.body.should.have.property("Error");
-//         res.body.should.have.property("status");
-//         res.should.be.json;
-//         done();
-//       });
-//   });
-//   it("should update and return a parcel delivery order with id", done => {
-//     Chai.request(app)
-//       .patch("/api/v1/parcels/4")
-//       .end((err, res) => {
-//         res.should.have.status(200);
-//         res.body.should.have.property("data");
-//         res.body.should.have.property("status");
-//         res.should.be.json;
-//         res.body.data[0].should.have.property("Order");
-//         res.body.data[0].should.have.property("Message");
-//         done();
-//       });
-//   });
-// });
+describe("/PATCH/:id Cancel Order", () => {
+  it("should return invalid id type for a non-integer id ", done => {
+    Chai.request(app)
+      .patch("/api/v1/parcels/y")
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property("status");
+        res.body.should.have.property("error");
+        res.should.be.json;
+        done();
+      });
+  });
+  it("should return not found for an invalid id", done => {
+    Chai.request(app)
+      .patch("/api/v1/parcels/9")
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property("message");
+        res.body.should.have.property("status");
+        res.should.be.json;
+        done();
+      });
+  });
+  it("should update and return a parcel delivery order with id", done => {
+    Chai.request(app)
+      .patch("/api/v1/parcels/4")
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property("data");
+        res.body.should.have.property("status");
+        res.should.be.json;
+        done();
+      });
+  });
+});
