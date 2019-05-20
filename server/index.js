@@ -1,4 +1,8 @@
+import "@babel/polyfill";
 import parcelRoute from "./routes/parcel";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const express = require("express");
 const app = express();
