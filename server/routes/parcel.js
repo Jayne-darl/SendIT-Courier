@@ -6,7 +6,7 @@ router.use(express.json());
 
 router.post("/", parcelController.create);
 router.get("/", parcelController.getAll);
-// router.get("/:id", parcelController.getOne);
+router.get("/:id", parcelController.getOne);
 // router.patch("/:id", parcelController.update);
 
 export default router;
