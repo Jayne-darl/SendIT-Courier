@@ -10,8 +10,11 @@
     "@babel/polyfill": "^7.4.3",
     "@babel/preset-env": "^7.4.4",
     "@babel/register": "^7.4.4",
+    "@hapi/joi": "^15.0.3",
+    "bcrypt": "^3.0.6",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
     "nodemon": "^1.19.0",
     "pg": "^7.11.0"
   },
@@ -26,7 +29,7 @@
   "scripts": {
     "start": "nodemon server/index.js --exec babel-node",
     "build": "babel server -d dist",
-    "test": "nyc --reporter=lcov --reporter=text --cache _mocha  --timeout 100000 --require @babel/register --require @babel/polyfill test --exit || true",
+    "test": "nyc --reporter=lcov --reporter=text --cache _mocha  --timeout 10000 --require @babel/register --require @babel/polyfill test --exit || true",
     "coverage": "npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
