@@ -8,6 +8,6 @@ router.use(express.json());
 router.post("/", Auth.verifyToken, parcelController.create);
 router.get("/", Auth.verifyToken, parcelController.getAll);
 router.get("/:id", Auth.verifyToken, parcelController.getOne);
-router.patch("/:id", Auth.verifyToken, parcelController.update);
+router.patch("/:id", Auth.verifyToken, parcelController.cancel);
 
 export default router;

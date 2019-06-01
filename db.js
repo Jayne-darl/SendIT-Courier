@@ -15,14 +15,12 @@ const createTables = async () => {
   const userTable = `
     CREATE TABLE IF NOT EXISTS
       users(
-        id SERIAL NOT NULL PRIMARY KEY,
-        first_name VARCHAR(50) NOT NULL,
-        last_name VARCHAR(50) NOT NULL,
-        email VARCHAR(150) UNIQUE,
-        username VARCHAR(100) NOT NULL,
-        registered TIMESTAMP,
-        is_admin BOOLEAN,
-        password VARCHAR NOT NULL
+id SERIAL NOT NULL PRIMARY KEY,
+name VARCHAR(50) NOT NULL,
+email VARCHAR(150) UNIQUE,
+password VARCHAR NOT NULL,
+is_admin BOOLEAN DEFAULT FALSE,
+registered TIMESTAMP DEFAULT now(),
       )
   `;
   try {
@@ -37,7 +35,7 @@ const createTables = async () => {
     CREATE TABLE IF NOT EXISTS
       parcel_order(
         id BIGSERIAL NOT NULL PRIMARY KEY,
-        sent_on TIMESTAMP,
+        sent_on TIMESTAMP DEFAULT now(),
         placed_by INTEGER REFERENCES users(id),
         parcel_name VARCHAR(50) NOT NULL,
         weight FLOAT NOT NULL,
@@ -47,10 +45,27 @@ const createTables = async () => {
         pickup_location VARCHAR(50) NOT NULL,
         current_location VARCHAR(50),
         description VARCHAR(200),
-        status VARCHAR(50) NOT NULL,
+        status VARCHAR(50) NOT NULL DEFAULT "pending",
+        CHECK(status IN('Pending', 'Cancelled','Delivered', 'In Transit'),
         delivered_on DATE,
+        updatedAt TIMESTAMP;
       )
   `;
+
+  1	"id"	"int8"	"NO"	NULL	"nextval('parcel_order_id_seq'::regclass)"	""	NULL
+2	"sent_on"	"timestamp"	"YES"	NULL	"now()"	""	NULL
+3	"placed_by"	"int4"	"NO"	NULL	NULL	"public.users(id)"	NULL
+4	"parcel_name"	"varchar(50)"	"NO"	NULL	NULL	""	NULL
+5	"weight"	"float8"	"NO"	NULL	NULL	""	NULL
+6	"receiver_name"	"varchar(50)"	"NO"	NULL	NULL	""	NULL
+7	"receiver_phonenumber"	"numeric"	"NO"	NULL	NULL	""	NULL
+8	"destination"	"varchar(50)"	"NO"	NULL	NULL	""	NULL
+9	"pickup_location"	"varchar(50)"	"NO"	NULL	NULL	""	NULL
+10	"current_location"	"varchar(50)"	"YES"	NULL	NULL	""	NULL
+11	"description"	"varchar(200)"	"YES"	NULL	NULL	""	NULL
+12	"status"	"varchar(50)"	"YES"	"(status)::text = ANY ((ARRAY['Pending'::character varying, 'In Transit'::character varying, 'Delivered'::character varying, 'Cancelled'::character varying])::text[])"	"'Pending'::character varying"	""	NULL
+13	"delivered_on"	"date"	"YES"	NULL	NULL	""	NULL
+14	"updated_at"	"timestamp"	"YES"	NULL	NULL	""	NULL
   try {
     console.log("parcels table created!: ");
     await pool.query(parcelsTable);

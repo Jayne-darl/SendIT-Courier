@@ -1,4 +1,5 @@
-import db from "../db";
+// import db from "../db";
+import db from "../db/testdb";
 import Helper from "../helpers/helper";
 
 const User = {
@@ -21,24 +22,22 @@ const User = {
         message: "Please enter a valid email address"
       });
     }
-    const hashPassword = Helper.hashPassword(req.body.password);
+    let hashPassword = Helper.hashPassword(req.body.password);
     // console.log(hashPassword);
 
     const createQuery = `INSERT INTO 
-    users(first_name, last_name, email, username, is_admin, password)
-    VALUES($1, $2, $3, $4, $5, $6)
+    users(name, email, is_admin, password)
+    VALUES($1, $2, $3, $4)
     returning *`;
     const values = [
-      req.body.first_name,
-      req.body.last_name,
+      req.body.name,
       req.body.email,
-      req.body.username,
       req.body.is_admin,
       hashPassword
     ];
     try {
       const { rows } = await db.query(createQuery, values);
-      const token = Helper.generateToken(rows[0].id);
+      const token = Helper.generateToken(rows[0]);
       return res.status(201).json({
         status: res.statusCode,
         token: token,
@@ -92,7 +91,7 @@ const User = {
           message: "The password you provided is incorrect"
         });
       }
-      const token = Helper.generateToken(rows[0].id);
+      const token = Helper.generateToken(rows[0]);
       return res.status(200).json({
         status: res.statusCode,
         token: token,
