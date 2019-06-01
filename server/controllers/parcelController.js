@@ -1,4 +1,5 @@
-import db from "../db";
+// import db from "../db";
+import db from "../db/testdb";
 
 const Order = {
   /**
@@ -29,9 +30,9 @@ const Order = {
         data: rows[0]
       });
     } catch (error) {
-      return res.status(400).json({
+      return res.status(500).json({
         status: res.statusCode,
-        error: `An error occured while trying to save your order ${error}`
+        error: error
       });
     }
   },
@@ -42,25 +43,50 @@ const Order = {
    * @returns {object} Parcel Orders Array
    */
   async getAll(req, res) {
-    const findAllQuery = "SELECT * FROM parcel_order";
-    try {
-      const { rows, rowCount } = await db.query(findAllQuery);
-      if (rowCount === 0) {
-        return res.status(204).json({
+    if (!req.adminStatus) {
+      const findAllQuery = `SELECT * FROM parcel_order WHERE placed_by = '${
+        req.user
+      }'`;
+      try {
+        const { rows, rowCount } = await db.query(findAllQuery);
+        if (rowCount === 0) {
+          return res.status(404).json({
+            status: res.statusCode,
+            message: "You have not created any parcels"
+          });
+        }
+        return res.status(200).json({
           status: res.statusCode,
-          message: "You have not created any parcels"
+          rows,
+          rowCount
+        });
+      } catch (error) {
+        return res.status(500).json({
+          status: res.statusCode,
+          error: error
         });
       }
-      return res.status(200).json({
-        status: res.statusCode,
-        rows,
-        rowCount
-      });
-    } catch (error) {
-      return res.status(400).json({
-        status: res.statusCode,
-        error: `An error occured while trying to save your order ${error}`
-      });
+    } else {
+      const findAllQuery = `SELECT * FROM parcel_order`;
+      try {
+        const { rows, rowCount } = await db.query(findAllQuery);
+        if (rowCount === 0) {
+          return res.status(404).json({
+            status: res.statusCode,
+            message: "There is no parcel delivery order in the database"
+          });
+        }
+        return res.status(200).json({
+          status: res.statusCode,
+          rows,
+          rowCount
+        });
+      } catch (error) {
+        return res.status(500).json({
+          status: res.statusCode,
+          error: error
+        });
+      }
     }
   },
   /**
@@ -70,57 +96,82 @@ const Order = {
    * @returns {object} parcel object
    */
   async getOne(req, res) {
-    const text = "SELECT * FROM parcel_order WHERE id = $1";
-    try {
-      const { rows } = await db.query(text, [req.params.id]);
-      if (!rows[0]) {
-        return res.status(404).json({
+    if (!req.adminStatus) {
+      const findOneQuery = `SELECT * FROM parcel_order WHERE id = $1 AND placed_by ='${
+        req.user
+      }'`;
+      try {
+        const { rows, rowCount } = await db.query(findOneQuery, [
+          req.params.id
+        ]);
+        if (rowCount === 0) {
+          return res.status(404).json({
+            status: res.statusCode,
+            message: "No such delivery order was created by you"
+          });
+        }
+        return res.status(200).json({
           status: res.statusCode,
-          message: "delivery order not found"
+          data: rows[0]
+        });
+      } catch (error) {
+        return res.status(500).json({
+          status: res.statusCode,
+          error: error
         });
       }
-      return res.status(200).json({
-        status: res.statusCode,
-        data: rows[0]
-      });
-    } catch (error) {
-      return res.status(400).json({
-        status: res.statusCode,
-        error: `An error occured while trying to save your order ${error}`
-      });
+    } else {
+      const text = `SELECT * FROM parcel_order WHERE id = $1`;
+      try {
+        const { rows, rowCount } = await db.query(text, [req.params.id]);
+        if (rowCount === 0) {
+          return res.status(404).json({
+            status: res.statusCode,
+            message: "Delivery order not found"
+          });
+        }
+        return res.status(200).json({
+          status: res.statusCode,
+          data: rows[0]
+        });
+      } catch (error) {
+        return res.status(500).json({
+          status: res.statusCode,
+          error: error
+        });
+      }
     }
   },
   /**
-   * Update delivery order: Cancel order
+   * Update delivery order status: Cancel order
    * @param {object} req
    * @param {object} res
-   * @returns {object} updated order
+   * @returns {object} updated order status
    */
-  async update(req, res) {
-    const findOneQuery = "SELECT * FROM parcel_order WHERE id = $1";
+  async cancel(req, res) {
+    const findOneQuery = `SELECT * FROM parcel_order WHERE id = $1 AND placed_by ='${
+      req.user
+    }'`;
     const updateOneQuery = `UPDATE parcel_order SET status = $1, updated_at = $2 WHERE id=$3 returning *`;
     try {
       const { rows } = await db.query(findOneQuery, [req.params.id]);
       if (!rows[0]) {
-        return res.status(404).json({
+        return res.status(400).json({
           status: res.statusCode,
-          message: "delivery order not found"
+          message: "Only parcel owners can cancel their delivery order"
         });
       }
-      const values = [
-        req.body.status || rows[0].status,
-        new Date(),
-        req.params.id
-      ];
+      const values = [req.body.status, new Date(), req.params.id];
       const response = await db.query(updateOneQuery, values);
       return res.status(200).json({
         status: res.statusCode,
-        data: response.rows[0]
+        data: response.rows[0],
+        message: "Your parcel delivery order has been successfully cancelled"
       });
     } catch (error) {
       return res.status(500).json({
         status: res.statusCode,
-        error: `An error occured while trying to save your order ${error}`
+        error: error
       });
     }
   }

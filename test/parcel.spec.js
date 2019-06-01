@@ -1,14 +1,19 @@
 import Chai from "chai";
 import ChaiHttp from "chai-http";
-import db from "../server/db";
 import app from "../server/index";
+import db from "../server/db/testdb";
 
 let should = Chai.should();
 
 Chai.use(ChaiHttp);
 
+let userToken;
+let adminToken;
+let otherToken;
+
 // parent block
 describe("Parcel delivery order test", () => {
+  // clear parcel_order table
   before(async () => {
     try {
       await db.query(
@@ -18,12 +23,42 @@ describe("Parcel delivery order test", () => {
       console.log(error);
     }
   });
-  // afterEach(done => {
-  //   done();
-  // });
-  // /**
-  //  * Test the /POST route
-  //  */
+
+  before(done => {
+    Chai.request(app)
+      .post("/api/v1/auth/login")
+      .send({ email: "janeuche@gmail.com", password: "password" })
+      .end((err, res) => {
+        userToken = JSON.parse(res.text).token;
+        done(err);
+      });
+  });
+
+  before(done => {
+    Chai.request(app)
+      .post("/api/v1/auth/login")
+      .send({ email: "tester@gmail.com", password: "password" })
+      .end((err, res) => {
+        otherToken = JSON.parse(res.text).token;
+        done(err);
+      });
+  });
+
+  before(done => {
+    Chai.request(app)
+      .post("/api/v1/auth/login")
+      .send({ email: "admin@gmail.com", password: "password" })
+      .end((err, res) => {
+        adminToken = JSON.parse(res.text).token;
+        done(err);
+      });
+  });
+  //   afterEach(done => {
+  //     done();
+  //   });
+  /**
+   * Test the /POST route
+   */
   describe("/POST order", () => {
     it("it should not post the parcel delivery order if there is no header token provided", done => {
       let newParcel = {
@@ -40,15 +75,15 @@ describe("Parcel delivery order test", () => {
         .end((err, res) => {
           res.should.have.status(401);
           res.should.be.json;
+          res.body.should.have.property("status");
           res.body.should.have
             .property("message")
             .eql("Token is not provided, Please create an account");
           res.body.should.have.property("status");
-          done();
+          done(err);
         });
     });
     it("should create a parcel delivery order", done => {
-      const agent = Chai.request.agent(app);
       let newParcel = {
         parcel_name: "Food",
         weight: "4",
@@ -57,183 +92,196 @@ describe("Parcel delivery order test", () => {
         destination: "Abia",
         pickup_location: "Road"
       };
-
-      agent
-        .post("/api/v1/auth/login")
-        .send({
-          email: "kolo@gmail.com",
-          password: "01234"
-        })
-        .then(res => {
-          const token = JSON.parse(res.text).token;
-          res.status.should.eql(200);
+      Chai.request(app)
+        .post("/api/v1/parcels")
+        .set("x-access-token", userToken)
+        .send(newParcel)
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.should.be.json;
+          res.body.should.have.property("data");
+          res.body.should.have.property("status");
           Object.keys(JSON.parse(res.text).data).length.should.be.above(0);
-
-          return agent
-            .post("/api/v1/parcels")
-            .set("x-access-token", token)
-            .send(newParcel)
-            .then(res => {
-              res.should.have.status(201);
-              res.should.be.json;
-              res.body.should.have.property("data");
-              res.body.should.have.property("status");
-              Object.keys(JSON.parse(res.text).data).length.should.be.above(0);
-              res.body.should.have
-                .property("message")
-                .eql("New parcel added successfuly");
-            })
-            .then(() => {
-              done();
-              agent.close();
-            });
+          res.body.should.have
+            .property("message")
+            .eql("New parcel added successfuly");
+          done(err);
         });
+    });
+    it("should return error if a key-value pair is missing", done => {
+      let newParcel = {
+        parcel_name: "Food",
+        weight: "4",
+        receiver_name: "Uche",
+        receiver_phonenumber: "080656786",
+        destination: "Abia"
+      };
+      Chai.request(app)
+        .post("/api/v1/parcels")
+        .set("x-access-token", userToken)
+        .send(newParcel)
+        .end((err, res) => {
+          res.should.have.status(500);
+          res.should.be.json;
+          res.body.should.have.property("status");
+          res.body.should.have.property("error");
+          done(err);
+        });
+    });
 
-      it("should not create a parcel delivery order with invalid token", done => {
-        let newParcel = {
-          parcel_name: "Food",
-          weight: "4",
-          receiver_name: "Uche",
-          receiver_phonenumber: "080656786",
-          destination: "Abia",
-          description: "A cooler of eba"
-        };
-        Chai.request(app)
-          .post("/api/v1/parcels")
-          .set("x-access-token", token)
-          .send(newParcel)
-          .end((err, res) => {
-            res.should.have.status(400);
-            res.should.be.json;
-            res.body.should.have
-              .property("message")
-              .eql("The token you provided is invalid");
-            res.body.should.have.property("status");
-            done();
-          });
-      });
+    it("should not create a parcel delivery order with invalid token", done => {
+      let newParcel = {
+        parcel_name: "Food",
+        weight: "4",
+        receiver_name: "Uche",
+        receiver_phonenumber: "080656786",
+        destination: "Abia",
+        pickup_location: "A cooler of eba"
+      };
+      Chai.request(app)
+        .post("/api/v1/parcels")
+        .set("x-access-token", "yuegruy74rweyurtwu6t")
+        .send(newParcel)
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.should.be.json;
+          res.body.should.have.property("status");
+          res.body.should.have.property("error");
+          done(err);
+        });
     });
   });
   /**
    * Test the /GET route
    */
   describe("/GET Orders", () => {
-    it("should not return orders without header token", done => {
+    it("should not return orders without header token or an empty one", done => {
       Chai.request(app)
         .get("/api/v1/parcels")
-        .end((end, res) => {
+        .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property("status");
-          res.body.should.have.property("message");
+          res.body.should.have
+            .property("message")
+            .eql("Token is not provided, Please create an account");
           res.should.be.json;
-          done();
+          done(err);
         });
     });
-    it("should return all parcel delivery order with header token", done => {
-      const agent = Chai.request.agent(app);
-
-      agent
-        .post("/api/v1/auth/login")
-        .send({
-          email: "kolo@gmail.com",
-          password: "01234"
-        })
-        .then(res => {
-          const token = JSON.parse(res.text).token;
-          res.status.should.eql(200);
-          Object.keys(JSON.parse(res.text).data).length.should.be.above(0);
-
-          return agent
-            .get("/api/v1/parcels")
-            .set("x-access-token", token)
-            .then(res => {
-              res.should.have.status(200);
-              res.body.should.have.property("status");
-              res.body.should.have.property("rows");
-            })
-            .then(() => {
-              done();
-              agent.close();
-            });
+    it("should return you have not created any parcel", done => {
+      Chai.request(app)
+        .get("/api/v1/parcels")
+        .set("x-access-token", otherToken)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("status");
+          res.body.should.have
+            .property("message")
+            .eql("You have not created any parcels");
+          done(err);
+        });
+    });
+    it("should return all parcel delivery order in the database", done => {
+      Chai.request(app)
+        .get("/api/v1/parcels")
+        .set("x-access-token", adminToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.should.have.property("rows");
+          done(err);
         });
     });
   });
+
   /**
    * Test the /GET/:id route
    */
   describe("/GET/:id Order", () => {
     it("should not return order without header token", done => {
       Chai.request(app)
-        .get("/api/v1/parcels/1")
+        .get("/api/v1/parcels/56")
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property("status");
           res.body.should.have.property("message");
           res.should.be.json;
-          done();
+          done(err);
         });
     });
-    it("should return a parcel delivery order with header token", done => {
-      const agent = Chai.request.agent(app);
 
-      agent
-        .post("/api/v1/auth/login")
-        .send({
-          email: "kolo@gmail.com",
-          password: "01234"
-        })
-        .then(res => {
-          const token = JSON.parse(res.text).token;
-          res.status.should.eql(200);
-          Object.keys(JSON.parse(res.text).data).length.should.be.above(0);
-
-          return agent
-            .get("/api/v1/parcels/1")
-            .set("x-access-token", token)
-            .then(res => {
-              res.should.have.status(200);
-              res.body.should.have.property("status");
-              res.body.should.have.property("data");
-            })
-            .then(() => {
-              done();
-              agent.close();
-            });
+    it("should return not found for parcel not created by user", done => {
+      Chai.request(app)
+        .get("/api/v1/parcels/9")
+        .set("x-access-token", userToken)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message");
+          res.body.should.have
+            .property("message")
+            .eql("No such delivery order was created by you");
+          res.body.should.have.property("status");
+          res.should.be.json;
+          done(err);
+        });
+    });
+    it("should return a parcel delivery order with id", done => {
+      Chai.request(app)
+        .get("/api/v1/parcels/1")
+        .set("x-access-token", userToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("data");
+          res.body.should.have.property("status");
+          res.should.be.json;
+          done(err);
+        });
+    });
+    it("should return any parcel delivery order in the database", done => {
+      Chai.request(app)
+        .get("/api/v1/parcels/1")
+        .set("x-access-token", adminToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.should.have.property("data");
+          done(err);
+        });
+    });
+    it("should return not found for unavailable", done => {
+      Chai.request(app)
+        .get("/api/v1/parcels/9")
+        .set("x-access-token", adminToken)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message");
+          res.body.should.have
+            .property("message")
+            .eql("Delivery order not found");
+          res.body.should.have.property("status");
+          res.should.be.json;
+          done(err);
+        });
+    });
+    it("should cancel and return a parcel delivery order with id", done => {
+      Chai.request(app)
+        .patch("/api/v1/parcels/1e")
+        .set("x-access-token", adminToken)
+        .end((err, res) => {
+          res.should.have.status(500);
+          res.body.should.have.property("status");
+          res.body.should.have.property("error");
+          res.should.be.json;
+          done(err);
         });
     });
   });
 
-  //   it("should return not found for an invalid id", done => {
-  //     Chai.request(app)
-  //       .get("/api/v1/parcels/9")
-  //       .end((err, res) => {
-  //         res.should.have.status(404);
-  //         res.body.should.have.property("message");
-  //         res.body.should.have
-  //           .property("message")
-  //           .eql("delivery order not found");
-  //         res.body.should.have.property("status");
-  //         res.should.be.json;
-  //         done();
-  //       });
-  //   });
-  //   it("should return a parcel delivery order with id", done => {
-  //     Chai.request(app)
-  //       .get("/api/v1/parcels/4")
-  //       .end((err, res) => {
-  //         res.should.have.status(200);
-  //         res.body.should.have.property("data");
-  //         res.body.should.have.property("status");
-  //         res.should.be.json;
-  //         done();
-  //       });
-  //   });
-  // });
-  // /**
-  //  * Test the /PATCH/:id/cancel order
-  //  */
+  /**
+   * Test the /PATCH/:id/cancel order
+   */
   describe("/PATCH/:id Cancel Order", () => {
-    it("should not update under without token ", done => {
+    it("should not cancel order under without token ", done => {
       Chai.request(app)
         .patch("/api/v1/parcels/y")
         .end((err, res) => {
@@ -244,54 +292,75 @@ describe("Parcel delivery order test", () => {
           done();
         });
     });
-    it("should return a parcel delivery order with header token", done => {
-      const agent = Chai.request.agent(app);
-
-      agent
-        .post("/api/v1/auth/login")
-        .send({
-          email: "kolo@gmail.com",
-          password: "01234"
-        })
-        .then(res => {
-          const token = JSON.parse(res.text).token;
-          res.status.should.eql(200);
-          Object.keys(JSON.parse(res.text).data).length.should.be.above(0);
-
-          return agent
-            .patch("/api/v1/parcels/1")
-            .set("x-access-token", token)
-            .then(res => {
-              res.should.have.status(200);
-              res.body.should.have.property("status");
-              res.body.should.have.property("data");
-            })
-            .then(() => {
-              done();
-              agent.close();
-            });
+    it("should return not bad request for parcel not created by a user", done => {
+      Chai.request(app)
+        .patch("/api/v1/parcels/1")
+        .set("x-access-token", otherToken)
+        .send({ status: "Cancelled" })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have
+            .property("message")
+            .eql("Only parcel owners can cancel their delivery order");
+          res.body.should.have.property("status");
+          res.should.be.json;
+          done(err);
         });
     });
-    // it("should return not found for an invalid id", done => {
-    //   Chai.request(app)
-    //     .patch("/api/v1/parcels/9")
-    //     .end((err, res) => {
-    //       res.should.have.status(404);
-    //       res.body.should.have.property("message");
-    //       res.body.should.have.property("status");
-    //       res.should.be.json;
-    //       done();
-    //     });
-    // });
-    // it("should update and return a parcel delivery order with id", done => {
-    //   Chai.request(app)
-    //     .patch("/api/v1/parcels/4")
-    //     .end((err, res) => {
-    //       res.should.have.status(200);
-    //       res.body.should.have.property("data");
-    //       res.body.should.have.property("status");
-    //       res.should.be.json;
-    //       done();
+    it("should cancel and return a parcel delivery order with id", done => {
+      Chai.request(app)
+        .patch("/api/v1/parcels/1")
+        .set("x-access-token", userToken)
+        .send({ status: "Cancelled" })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("data");
+          res.body.should.have.property("status");
+          res.body.should.have
+            .property("message")
+            .eql("Your parcel delivery order has been successfully cancelled");
+          res.should.be.json;
+          done(err);
+        });
+    });
+    it("should return error", done => {
+      Chai.request(app)
+        .patch("/api/v1/parcels/1")
+        .set("x-access-token", userToken)
+        .end((err, res) => {
+          res.should.have.status(500);
+          res.body.should.have.property("status");
+          res.body.should.have.property("error");
+          res.should.be.json;
+          done(err);
+        });
+    });
+  });
+  /**
+   * describe /GET for admin
+   */
+  describe("GET /api/v1/parcels/delivered", () => {
+    before(async () => {
+      try {
+        await db.query(
+          "TRUNCATE parcel_order; ALTER SEQUENCE parcel_order_id_seq RESTART WITH 1;"
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    });
+    it("should return there is no parcel in database for empty database", done => {
+      Chai.request(app)
+        .get("/api/v1/parcels")
+        .set("x-access-token", adminToken)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("status");
+          res.body.should.have
+            .property("message")
+            .eql("There is no parcel delivery order in the database");
+          done(err);
+        });
+    });
   });
 });
-// });
