@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 // import db from "../db";
 // import db from "../db/testdb";
 
-const Auth = {
+class Auth {
   /**
    * Verify Token
    * @param {object} req
@@ -10,7 +10,7 @@ const Auth = {
    * @param {object} next
    * @returns {object|void} response object
    */
-  async verifyToken(req, res, next) {
+  static async verifyToken(req, res, next) {
     const token =
       req.headers["x-access-token"] || req.body["x-access-token"] || null;
     if (!token) {
@@ -39,6 +39,6 @@ const Auth = {
       });
     }
   }
-};
+}
 
 export default Auth;
