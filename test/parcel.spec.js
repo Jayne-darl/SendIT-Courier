@@ -13,17 +13,6 @@ let otherToken;
 
 // parent block
 describe("Parcel delivery order test", () => {
-  // clear parcel_order table
-  before(async () => {
-    try {
-      await db.query(
-        "TRUNCATE parcel_order; ALTER SEQUENCE parcel_order_id_seq RESTART WITH 1;"
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
   before(done => {
     Chai.request(app)
       .post("/api/v1/auth/login")
@@ -53,13 +42,22 @@ describe("Parcel delivery order test", () => {
         done(err);
       });
   });
-  //   afterEach(done => {
-  //     done();
-  //   });
+  afterEach(done => {
+    done();
+  });
   /**
    * Test the /POST route
    */
   describe("/POST order", () => {
+    before(done => {
+      Chai.request(app)
+        .post("/api/v1/auth/login")
+        .send({ email: "janeuche@gmail.com", password: "password" })
+        .end((err, res) => {
+          userToken = JSON.parse(res.text).token;
+          done(err);
+        });
+    });
     it("it should not post the parcel delivery order if there is no header token provided", done => {
       let newParcel = {
         parcel_name: "Food",
@@ -339,28 +337,28 @@ describe("Parcel delivery order test", () => {
   /**
    * describe /GET for admin
    */
-  describe("GET /api/v1/parcels/delivered", () => {
-    before(async () => {
-      try {
-        await db.query(
-          "TRUNCATE parcel_order; ALTER SEQUENCE parcel_order_id_seq RESTART WITH 1;"
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    });
-    it("should return there is no parcel in database for empty database", done => {
-      Chai.request(app)
-        .get("/api/v1/parcels")
-        .set("x-access-token", adminToken)
-        .end((err, res) => {
-          res.should.have.status(404);
-          res.body.should.have.property("status");
-          res.body.should.have
-            .property("message")
-            .eql("There is no parcel delivery order in the database");
-          done(err);
-        });
-    });
-  });
+  // describe("GET /api/v1/parcels/delivered", () => {
+  //   before(async () => {
+  //     try {
+  //       await db.query(
+  //         "TRUNCATE parcel_order; ALTER SEQUENCE parcel_order_id_seq RESTART WITH 1;"
+  //       );
+  //     } catch (error) {
+  //       // console.log(error);
+  //     }
+  //   });
+  //   it("should return there is no parcel in database for empty database", done => {
+  //     Chai.request(app)
+  //       .get("/api/v1/parcels")
+  //       .set("x-access-token", adminToken)
+  //       .end((err, res) => {
+  //         res.should.have.status(404);
+  //         res.body.should.have.property("status");
+  //         res.body.should.have
+  //           .property("message")
+  //           .eql("There is no parcel delivery order in the database");
+  //         done(err);
+  //       });
+  //   });
+  // });
 });

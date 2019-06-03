@@ -2,7 +2,6 @@ import Chai from "chai";
 import ChaiHttp from "chai-http";
 import app from "../server/index";
 import db from "../server/db/testdb";
-
 let should = Chai.should();
 
 Chai.use(ChaiHttp);
@@ -18,12 +17,12 @@ describe("user", () => {
         "TRUNCATE parcel_order; ALTER SEQUENCE parcel_order_id_seq RESTART WITH 1;"
       );
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   });
-  // afterEach(done => {
-  //   done();
-  // });
+  afterEach(done => {
+    done();
+  });
 
   /**
    * Test the /POST route for create an account

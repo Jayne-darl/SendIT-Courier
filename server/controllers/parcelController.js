@@ -1,14 +1,14 @@
 // import db from "../db";
 import db from "../db/testdb";
 
-const Order = {
+class Order {
   /**
    * Create a Parcel Order
    * @param {object} req
    * @param {object} res
    * @returns {object} order object
    */
-  async create(req, res) {
+  static async create(req, res) {
     const text = `INSERT INTO 
       parcel_order ( placed_by, parcel_name, weight, receiver_name, receiver_phonenumber, destination, pickup_location)
       VALUES ( $1, $2, $3, $4, $5, $6, $7 ) returning *`;
@@ -35,14 +35,14 @@ const Order = {
         error: error
       });
     }
-  },
+  }
   /**
    * Get all Parcel Orders
    * @param {object} req
    * @param {object} res
    * @returns {object} Parcel Orders Array
    */
-  async getAll(req, res) {
+  static async getAll(req, res) {
     if (!req.adminStatus) {
       const findAllQuery = `SELECT * FROM parcel_order WHERE placed_by = '${
         req.user
@@ -88,14 +88,14 @@ const Order = {
         });
       }
     }
-  },
+  }
   /**
    * Get a Parcel Order
    * @Param {object} req
    * @Param {object} res
    * @returns {object} parcel object
    */
-  async getOne(req, res) {
+  static async getOne(req, res) {
     if (!req.adminStatus) {
       const findOneQuery = `SELECT * FROM parcel_order WHERE id = $1 AND placed_by ='${
         req.user
@@ -141,14 +141,14 @@ const Order = {
         });
       }
     }
-  },
+  }
   /**
    * Update delivery order status: Cancel order
    * @param {object} req
    * @param {object} res
    * @returns {object} updated order status
    */
-  async cancel(req, res) {
+  static async cancel(req, res) {
     const findOneQuery = `SELECT * FROM parcel_order WHERE id = $1 AND placed_by ='${
       req.user
     }'`;
@@ -175,5 +175,5 @@ const Order = {
       });
     }
   }
-};
+}
 export default Order;

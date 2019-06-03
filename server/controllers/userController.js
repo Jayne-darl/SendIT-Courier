@@ -2,14 +2,14 @@
 import db from "../db/testdb";
 import Helper from "../helpers/helper";
 
-const User = {
+class User {
   /**
    * Create A User
    * @params {object} req
    * @params {object} res
    * @returns {object} user object
    */
-  async create(req, res) {
+  static async create(req, res) {
     if (!req.body.email || !req.body.password || req.body.password.length < 1) {
       return res.status(400).json({
         status: res.statusCode,
@@ -55,14 +55,14 @@ const User = {
         error: `An error occured while trying to create an account ${error}`
       });
     }
-  },
+  }
   /**
    * Login
    * @params {object} req
    * @params {object} res
    * @returns {object} user object
    */
-  async login(req, res) {
+  static async login(req, res) {
     if (!req.body.email || !req.body.password) {
       return res.status(400).json({
         status: res.statusCode,
@@ -105,5 +105,5 @@ const User = {
       });
     }
   }
-};
+}
 export default User;
