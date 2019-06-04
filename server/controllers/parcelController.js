@@ -46,7 +46,7 @@ class Order {
     if (!req.adminStatus) {
       const findAllQuery = `SELECT * FROM parcel_order WHERE placed_by = '${
         req.user
-      }'`;
+        }'`;
       try {
         const { rows, rowCount } = await db.query(findAllQuery);
         if (rowCount === 0) {
@@ -99,7 +99,7 @@ class Order {
     if (!req.adminStatus) {
       const findOneQuery = `SELECT * FROM parcel_order WHERE id = $1 AND placed_by ='${
         req.user
-      }'`;
+        }'`;
       try {
         const { rows, rowCount } = await db.query(findOneQuery, [
           req.params.id
@@ -151,7 +151,7 @@ class Order {
   static async cancel(req, res) {
     const findOneQuery = `SELECT * FROM parcel_order WHERE id = $1 AND placed_by ='${
       req.user
-    }'`;
+      }'`;
     const updateOneQuery = `UPDATE parcel_order SET status = $1, updated_at = $2 WHERE id=$3 returning *`;
     try {
       const { rows } = await db.query(findOneQuery, [req.params.id]);
@@ -214,6 +214,43 @@ class Order {
       status: res.statusCode,
       message: "Only admin can update delivery order"
     });
+  }
+  static async changeDestination(req, res) {
+    const findOneQuery = `SELECT * FROM parcel_order WHERE id = $1 AND placed_by ='${
+      req.user
+      }'`;
+    const updateOneQuery = `UPDATE parcel_order SET destination = $1, updated_at = $2 WHERE id=$3 returning *`;
+    try {
+      const { rows } = await db.query(findOneQuery, [req.params.id]);
+      if (!rows[0]) {
+        return res.status(400).json({
+          status: res.statusCode,
+          message: "Only parcel owners change their delivery order destination"
+        });
+      }
+      if (rows[0].status == 'Delivered' || rows[0].status == 'In transit') {
+        return res.status(409).json({
+          status: res.statusCode,
+          message: "You can only change destination of pending orders"
+        })
+      }
+      const values = [
+        (req.body.destination),
+        new Date(),
+        req.params.id
+      ];
+      const response = await db.query(updateOneQuery, values);
+      return res.status(200).json({
+        status: res.statusCode,
+        data: response.rows[0],
+        message: "The destination of your parcel delivery order has been successfully updated"
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: res.statusCode,
+        error: error
+      });
+    }
   }
 }
 export default Order;
