@@ -266,12 +266,12 @@ describe("Parcel delivery order test", () => {
   });
 
   /**
-   * Test the /PATCH/:id/cancel order
+   * Test the /PATCH/:id/order
    */
-  describe("/PATCH/cancel/:id Cancel Order", () => {
+  describe("/PATCH/:id/Order", () => {
     it("should not cancel order under without token ", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/cancel/y")
+        .patch("/api/v1/parcels/y/cancel")
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property("status");
@@ -282,7 +282,7 @@ describe("Parcel delivery order test", () => {
     });
     it("should return not bad request for parcel not created by a user", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/cancel/1")
+        .patch("/api/v1/parcels/1/cancel")
         .set("x-access-token", otherToken)
         .send({ status: "Cancelled" })
         .end((err, res) => {
@@ -297,7 +297,7 @@ describe("Parcel delivery order test", () => {
     });
     it("should cancel and return a parcel delivery order with id", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/cancel/1")
+        .patch("/api/v1/parcels/1/cancel")
         .set("x-access-token", userToken)
         .send({ status: "Cancelled" })
         .end((err, res) => {
@@ -313,12 +313,31 @@ describe("Parcel delivery order test", () => {
     });
     it("should return error", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/cancel/1e")
+        .patch("/api/v1/parcels/1e/cancel")
         .set("x-access-token", userToken)
         .end((err, res) => {
           res.should.have.status(500);
           res.body.should.have.property("status");
           res.body.should.have.property("error");
+          res.should.be.json;
+          done(err);
+        });
+    });
+    /**
+     * update the destination of an order delivery
+     */
+    it("should not update the destination of delivered or in transit orders", done => {
+      Chai.request(app)
+        .patch("/api/v1/parcels/1/destination")
+        .set("x-access-token", userToken)
+        .send({ destination: "aba" })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("data")
+          res.body.should.have.property("status");
+          res.body.should.have
+            .property("message")
+            .eql("The destination of your parcel delivery order has been successfully updated");
           res.should.be.json;
           done(err);
         });
@@ -330,7 +349,7 @@ describe("Parcel delivery order test", () => {
   describe("PATCH /api/v1/parcels/update", () => {
     it("should return there is no parcel in database", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/3")
+        .patch("/api/v1/parcels/3/update")
         .set("x-access-token", adminToken)
         .send({ status: "Delivered" })
         .end((err, res) => {
@@ -344,7 +363,7 @@ describe("Parcel delivery order test", () => {
     });
     it("should update parcel in database", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/1")
+        .patch("/api/v1/parcels/1/update")
         .set("x-access-token", adminToken)
         .send({ status: "Delivered", current_location: "aba" })
         .end((err, res) => {
@@ -359,7 +378,7 @@ describe("Parcel delivery order test", () => {
     });
     it("should return update parcel in database", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/1")
+        .patch("/api/v1/parcels/1/update")
         .set("x-access-token", userToken)
         .send({ status: "Delivered", current_location: "aba" })
         .end((err, res) => {
@@ -373,7 +392,7 @@ describe("Parcel delivery order test", () => {
     });
     it("should return update parcel in database", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/1")
+        .patch("/api/v1/parcels/1/update")
         .set("x-access-token", adminToken)
         .end((err, res) => {
           res.should.have.status(200);

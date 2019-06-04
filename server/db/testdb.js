@@ -18,7 +18,7 @@ export default {
     return new Promise((resolve, reject) => {
       pool
         .query(text, params)
-        .then(res => {
+        .then((res) => {
           resolve(res);
         })
         .catch(err => {
