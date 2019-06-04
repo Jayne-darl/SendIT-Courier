@@ -16,16 +16,6 @@ describe("Parcel delivery order test", () => {
   before(done => {
     Chai.request(app)
       .post("/api/v1/auth/login")
-      .send({ email: "janeuche@gmail.com", password: "password" })
-      .end((err, res) => {
-        userToken = JSON.parse(res.text).token;
-        done(err);
-      });
-  });
-
-  before(done => {
-    Chai.request(app)
-      .post("/api/v1/auth/login")
       .send({ email: "tester@gmail.com", password: "password" })
       .end((err, res) => {
         otherToken = JSON.parse(res.text).token;
@@ -261,27 +251,27 @@ describe("Parcel delivery order test", () => {
           done(err);
         });
     });
-    it("should cancel and return a parcel delivery order with id", done => {
-      Chai.request(app)
-        .patch("/api/v1/parcels/1e")
-        .set("x-access-token", adminToken)
-        .end((err, res) => {
-          res.should.have.status(500);
-          res.body.should.have.property("status");
-          res.body.should.have.property("error");
-          res.should.be.json;
-          done(err);
-        });
-    });
+    //   it("should return error parcel delivery order with alphabetical id", done => {
+    //     Chai.request(app)
+    //       .patch("/api/v1/parcels/1e")
+    //       .set("x-access-token", userToken)
+    //       .end((err, res) => {
+    //         res.should.have.status(500);
+    //         res.body.should.have.property("status");
+    //         res.body.should.have.property("error");
+    //         res.should.be.json;
+    //         done(err);
+    //       });
+    //   });
   });
 
   /**
    * Test the /PATCH/:id/cancel order
    */
-  describe("/PATCH/:id Cancel Order", () => {
+  describe("/PATCH/cancel/:id Cancel Order", () => {
     it("should not cancel order under without token ", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/y")
+        .patch("/api/v1/parcels/cancel/y")
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property("status");
@@ -292,7 +282,7 @@ describe("Parcel delivery order test", () => {
     });
     it("should return not bad request for parcel not created by a user", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/1")
+        .patch("/api/v1/parcels/cancel/1")
         .set("x-access-token", otherToken)
         .send({ status: "Cancelled" })
         .end((err, res) => {
@@ -307,7 +297,7 @@ describe("Parcel delivery order test", () => {
     });
     it("should cancel and return a parcel delivery order with id", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/1")
+        .patch("/api/v1/parcels/cancel/1")
         .set("x-access-token", userToken)
         .send({ status: "Cancelled" })
         .end((err, res) => {
@@ -323,7 +313,7 @@ describe("Parcel delivery order test", () => {
     });
     it("should return error", done => {
       Chai.request(app)
-        .patch("/api/v1/parcels/1")
+        .patch("/api/v1/parcels/cancel/1e")
         .set("x-access-token", userToken)
         .end((err, res) => {
           res.should.have.status(500);
@@ -335,30 +325,64 @@ describe("Parcel delivery order test", () => {
     });
   });
   /**
-   * describe /GET for admin
+   * describe /PATCH for admin
    */
-  // describe("GET /api/v1/parcels/delivered", () => {
-  //   before(async () => {
-  //     try {
-  //       await db.query(
-  //         "TRUNCATE parcel_order; ALTER SEQUENCE parcel_order_id_seq RESTART WITH 1;"
-  //       );
-  //     } catch (error) {
-  //       // console.log(error);
-  //     }
-  //   });
-  //   it("should return there is no parcel in database for empty database", done => {
-  //     Chai.request(app)
-  //       .get("/api/v1/parcels")
-  //       .set("x-access-token", adminToken)
-  //       .end((err, res) => {
-  //         res.should.have.status(404);
-  //         res.body.should.have.property("status");
-  //         res.body.should.have
-  //           .property("message")
-  //           .eql("There is no parcel delivery order in the database");
-  //         done(err);
-  //       });
-  //   });
-  // });
+  describe("PATCH /api/v1/parcels/update", () => {
+    it("should return there is no parcel in database", done => {
+      Chai.request(app)
+        .patch("/api/v1/parcels/3")
+        .set("x-access-token", adminToken)
+        .send({ status: "Delivered" })
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("status");
+          res.body.should.have
+            .property("message")
+            .eql("No parcel with such id exist in the database");
+          done(err);
+        });
+    });
+    it("should update parcel in database", done => {
+      Chai.request(app)
+        .patch("/api/v1/parcels/1")
+        .set("x-access-token", adminToken)
+        .send({ status: "Delivered", current_location: "aba" })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.should.have.property("data");
+          res.body.should.have
+            .property("message")
+            .eql("The parcel delivery order has been successfully updated");
+          done(err);
+        });
+    });
+    it("should return update parcel in database", done => {
+      Chai.request(app)
+        .patch("/api/v1/parcels/1")
+        .set("x-access-token", userToken)
+        .send({ status: "Delivered", current_location: "aba" })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.should.have
+            .property("message")
+            .eql("Only admin can update delivery order");
+          done(err);
+        });
+    });
+    it("should return update parcel in database", done => {
+      Chai.request(app)
+        .patch("/api/v1/parcels/1")
+        .set("x-access-token", adminToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.should.have
+            .property("message")
+            .eql("The parcel delivery order has been successfully updated");
+          done(err);
+        });
+    });
+  });
 });

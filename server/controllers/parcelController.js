@@ -161,7 +161,11 @@ class Order {
           message: "Only parcel owners can cancel their delivery order"
         });
       }
-      const values = [req.body.status, new Date(), req.params.id];
+      const values = [
+        (req.body.status = "Cancelled"),
+        new Date(),
+        req.params.id
+      ];
       const response = await db.query(updateOneQuery, values);
       return res.status(200).json({
         status: res.statusCode,
@@ -174,6 +178,42 @@ class Order {
         error: error
       });
     }
+  }
+  static async update(req, res) {
+    if (req.adminStatus) {
+      const findOneQuery = `SELECT * FROM parcel_order WHERE id = $1 `;
+      const updateOneQuery = `UPDATE parcel_order SET status = $1, current_location = $2,updated_at = $3 WHERE id=$4 returning *`;
+      try {
+        const { rows } = await db.query(findOneQuery, [req.params.id]);
+        if (!rows[0]) {
+          return res.status(404).json({
+            status: res.statusCode,
+            message: "No parcel with such id exist in the database"
+          });
+        }
+        const values = [
+          req.body.status || rows[0].status,
+          req.body.current_location || rows[0].current_location,
+          new Date(),
+          req.params.id
+        ];
+        const response = await db.query(updateOneQuery, values);
+        return res.status(200).json({
+          status: res.statusCode,
+          data: response.rows[0],
+          message: "The parcel delivery order has been successfully updated"
+        });
+      } catch (error) {
+        return res.status(500).json({
+          status: res.statusCode,
+          error: `${error}`
+        });
+      }
+    }
+    return res.status(400).json({
+      status: res.statusCode,
+      message: "Only admin can update delivery order"
+    });
   }
 }
 export default Order;
