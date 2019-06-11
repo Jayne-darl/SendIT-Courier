@@ -2,6 +2,8 @@
 import db from "../db/testdb";
 import Helper from "../helpers/helper";
 
+const nodemailer = require('nodemailer');
+
 class User {
   /**
    * Create A User
@@ -103,6 +105,53 @@ class User {
         error: `An error occured while trying to log in ${error}`
       });
     }
+  }
+
+  /**
+   * Send mail on order update
+   * @params {object} req
+   * @params {object} res
+   * @returns {object} 
+   */
+  static async mail(req, res) {
+    const output = `
+        <p>${req.body.message}
+        <br><br>
+        ${req.body.name}<br>
+        <br>
+        SendIT-Courier<br></p>
+        `;
+    // create reusable transporter object using the default SMTP transport
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: 'janeuchechukwu@gmail.com', // generated ethereal user
+        pass: process.env.PASSWORD, // generated ethereal password
+      },
+    });
+    // setup email data with unicode symbols
+    const mailOptions = {
+      from: '"SendIT Courier" <janeuchechukwu@gmail.com>', // sender address
+      to: ` ${req.body.email}`, // list of receivers
+      subject: 'The Update on your parcel delivery order', // Subject line
+      html: output, // html body
+    };
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        return console.log(err)
+      }
+      console.log('Message sent: %s', info.messageId);
+      // Preview only available when sending through an Ethereal account
+      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      return res.status(200)
+        .json({
+          status: 200,
+          message: 'The mail has been sent successfully',
+        });
+    });
   }
 }
 export default User;

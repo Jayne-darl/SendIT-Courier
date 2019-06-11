@@ -1,7 +1,7 @@
 import Chai from "chai";
 import ChaiHttp from "chai-http";
 import app from "../server/index";
-import db from "../server/db/testdb";
+import db from "../server/db/testdb"
 
 let should = Chai.should();
 
@@ -13,6 +13,15 @@ let otherToken;
 
 // parent block
 describe("Parcel delivery order test", () => {
+  before(async () => {
+    try {
+      await db.query(
+        "TRUNCATE parcel_order; ALTER SEQUENCE parcel_order_id_seq RESTART WITH 1;"
+      );
+    } catch (error) {
+      // console.log(error);
+    }
+  });
   before(done => {
     Chai.request(app)
       .post("/api/v1/auth/login")
@@ -404,4 +413,76 @@ describe("Parcel delivery order test", () => {
         });
     });
   });
+  /**
+   * Test for mailing
+   */
+  describe("POST/api/v1/auth/mail", () => {
+    it("should send mail", done => {
+      const content = {
+        name: "Jane Uchechukwu",
+        email: "janeuche@gmail.com",
+        message: "Hello"
+      };
+      Chai.request(app)
+        .post("/api/v1/auth/mail")
+        .set("x-access-token", adminToken)
+        .send(content)
+        .end((err, res) => {
+          res.should.be.json;
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.should.have
+            .property("message")
+            .eql("The mail has been sent successfully");
+          done(err);
+        })
+    })
+    /**
+     * Test when all field is not filled
+     */
+    it("should not send mail if any field is not empty", done => {
+      const content = {
+        name: "Jane Uchechukwu",
+        message: "Hello"
+      };
+      Chai.request(app)
+        .post("/api/v1/auth/mail")
+        .set("x-access-token", adminToken)
+        .send(content)
+        .end((err, res) => {
+          res.should.be.json;
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.should.have
+            .property("message")
+            .eql("Please, supply all the required information");
+          done(err);
+        })
+    })
+  })
+
+  // /**
+  //  * Test map distance
+  //  */
+  // describe("GET/api/v1/parcels/1/distance", () => {
+  //   it("should send mail", done => {
+  //     const content = {
+  //       pickup_location: "Lagos, Nigeria",
+  //       destination: "Abuja, Nigeria",
+  //     };
+  //     Chai.request(app)
+  //       .post("/api/v1/parcels/1/distance")
+  //       .set("x-access-token", adminToken)
+  //       .send(content)
+  //       .end((err, res) => {
+  //         // res.should.be.json;
+  //         res.should.have.status(200);
+  //         res.body.should.have.property("status");
+  //         // res.body.should.have
+  //         //   .property("message")
+  //         //   .eql("The mail has been sent successfully");
+  //         done(err);
+  //       })
+  //   })
+  // })
 });
