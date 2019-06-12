@@ -1,0 +1,464 @@
+FORMAT: 1A
+HOST: https://sendit-heroku-staging.herokuapp.com/
+
+# SendIT-Courier
+
+SendIT-Courier is a web based application where users can send packages to destination across the globe.
+
+## Project Overview
+##### These are the HTTP request methods used in this project
+
+* GET - This method is used to get a resource
+* POST - This method is used to create a resource or send data
+* PATCH - This method is used to update a resource
+* DELETE - This method is used to delete a resource
+
+##### These are the HTTP response codes used in this project.
+
+* 200 - This OK status code indicates that a request has succeeded
+* 201 - This created status code indicates that a resource has been created
+* 400 - This bad request error status code indicates that the request sent to the server is incorrect
+* 401 - The access credentials (via the Authorization header) were missing or are invalid
+* 403 - The credentials you provided are valid, but you are not authorized to access the resource you were looking for
+* 404 - Returned when the request is valid, but the resource you try to access does not exist, or is outside your scope
+* 409 - This conflict status code indicates that the request--response asked for is conflicted
+* 500 - This internal server error status code indicates that something has gone wrong on the web server
+
+##### These are the routes created in this project.
+
+* POST/api/v1/auth/create - Create a new account
+* POST/api/v1/auth/login - Log into account
+* POST/api/v1/parcels - Create a delivery order
+* GET/api/v1/parcels/all - Fetch all parcel delivery order
+* GET/api/v1/parcels/:id - Fetch a specific parcel order
+* PATCH/api/v1/parcels/:id/cancel - Cancel a parcel delivery order
+* PATCH/api/v1/parcels/:id/update - Update the current location and status of a delivery order
+* PATCH/api/v1/parcels/:id/destination - Update the destination a delivery order
+* POST/api/v1/auth/mail - Send mail to users on delivery order update
+
+## USER CREATE ACCOUNT [/api/v1/auth/create]
+
+###  A user can create account [POST]
+This API route `/api/v1/auth/create` allows new users to be able to create an account.
+
++ Request (application/json)
+
+        {
+            "name": "Jane Uche",
+            "email": "jayne@gmail.com",
+            "password": "password"
+        }
+        
+
++ Response 201 (application/json)
+
+        {
+            "status": 201,
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkphbmUgVWNoZSIsImVtYWlsIjoiamF5bmVAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDgkd2IwdTVsWWRNTDhPRnlqNkJDYVF5T2tXOXVKSVhOdnBnb3RaZ2hpM3ZXWnVOM3l0aldOcUciLCJpc19hZG1pbiI6bnVsbCwicmVnaXN0ZXJlZCI6IjIwMTktMDYtMTJUMTc6MjQ6MzYuNDIyWiIsImlhdCI6MTU2MDM2MDI3NiwiZXhwIjoxNTYwOTY1MDc2fQ.WocVUfEpqDcj3j8PnOLxvMRUpM5ZLoPQQ_h8VkXxeBo",
+            "data": {
+                "id": 5,
+                "name": "Jane Uche",
+                "email": "jayne@gmail.com",
+                "password": "$2b$08$wb0u5lYdML8OFyj6BCaQyOkW9uJIXNvpgotZghi3vWZuN3ytjWNqG",
+                "is_admin": null,
+                "registered": "2019-06-12T17:24:36.422Z"
+            }
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "status": 400,
+            "message": "User with that EMAIL already exist"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": 400,
+            "message": "Some values are missing"
+        }
+        
+## USER LOG IN [/api/v1/auth/login]
+
+###  A user can log into account [POST]
+This API route `/api/v1/auth/login` allows existing users to log into their account.
+
++ Request (application/json)
+
+        {
+            "email": "jayne@gmail.com",
+            "password": "password"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkphbmUgVWNoZSIsImVtYWlsIjoiamF5bmVAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDgkd2IwdTVsWWRNTDhPRnlqNkJDYVF5T2tXOXVKSVhOdnBnb3RaZ2hpM3ZXWnVOM3l0aldOcUciLCJpc19hZG1pbiI6bnVsbCwicmVnaXN0ZXJlZCI6IjIwMTktMDYtMTJUMTc6MjQ6MzYuNDIyWiIsImlhdCI6MTU2MDM2MTAxNSwiZXhwIjoxNTYwOTY1ODE1fQ.9eyXP6isdw1bydijpXWl7XeMFPGXKH6_8M1UptKSKrE",
+            "data": {
+                "id": 5,
+                "name": "Jane Uche",
+                "email": "jayne@gmail.com",
+                "password": "$2b$08$wb0u5lYdML8OFyj6BCaQyOkW9uJIXNvpgotZghi3vWZuN3ytjWNqG",
+                "is_admin": null,
+                "registered": "2019-06-12T17:24:36.422Z"
+            },
+            "message": "Logged in successfully"
+        }
+        
+
++ Response 400 (application/json)
+
+        {
+            "status": 400,
+            "message": "Some values are missing"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": 400,
+            "message": "Please enter a valid email address"
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "status": 400,
+            "message": "The password you provided is incorrect"
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": 404,
+            "message": "User not found"
+        }
+
+## CREATE A DELIVERY ORDERS [/api/v1/parcels/]
+
+###  A user can create a new delivery order [POST]
+This API endpoint `/api/v1/parcels` allows users to create a new delivery order.
+
++ Request (application/json)
+
+    + Headers
+    
+            x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkphbmUgVWNoZSIsImVtYWlsIjoiamF5bmVAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDgkd2IwdTVsWWRNTDhPRnlqNkJDYVF5T2tXOXVKSVhOdnBnb3RaZ2hpM3ZXWnVOM3l0aldOcUciLCJpc19hZG1pbiI6bnVsbCwicmVnaXN0ZXJlZCI6IjIwMTktMDYtMTJUMTc6MjQ6MzYuNDIyWiIsImlhdCI6MTU2MDM2MTc1OCwiZXhwIjoxNTYwOTY2NTU4fQ.CS6FmLjTwxq3phFoZLB-90soHqxkHWrkqMf4WfuW1SI
+    
+    + Body 
+    
+            {
+                "parcel_name":"planks",
+                "weight": "43",
+                "receiver_name": "joyce",
+                "receiver_phonenumber":"08067356565",
+                "destination":"New York",
+                "pickup_location":"Lagos"
+            }
+
++ Response 200 (application/json)
+
+        {
+            "status": 201,
+            "message": "New parcel added successfuly",
+            "data": {
+                "id": "1",
+                "sent_on": "2019-06-12T17:49:50.106Z",
+                "placed_by": 5,
+                "parcel_name": "planks",
+                "weight": 43,
+                "receiver_name": "joyce",
+                "receiver_phonenumber": "8067356565",
+                "destination": "New York",
+                "pickup_location": "Lagos",
+                "current_location": null,
+                "description": null,
+                "status": "pending",
+                "delivered_on": null,
+                "updated_at": null
+            }
+        }
+        
+## FETCH ALL DELIVERY ORDERS [/api/v1/parcels/all]
+
+###  A user/Admin can fetch all delivery orders [GET]
+This API endpoint `/api/v1/parcels/all` allows users to fetch all the deivery order they created and admin can fetch all orders from the database.
+
++ Request (application/json)
+
+    + Headers
+    
+            x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkphbmUgVWNoZSIsImVtYWlsIjoiamF5bmVAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDgkd2IwdTVsWWRNTDhPRnlqNkJDYVF5T2tXOXVKSVhOdnBnb3RaZ2hpM3ZXWnVOM3l0aldOcUciLCJpc19hZG1pbiI6bnVsbCwicmVnaXN0ZXJlZCI6IjIwMTktMDYtMTJUMTc6MjQ6MzYuNDIyWiIsImlhdCI6MTU2MDM2MTc1OCwiZXhwIjoxNTYwOTY2NTU4fQ.CS6FmLjTwxq3phFoZLB-90soHqxkHWrkqMf4WfuW1SI
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "rows": [
+                {
+                    "id": "1",
+                    "sent_on": "2019-06-12T17:49:50.106Z",
+                    "placed_by": 5,
+                    "parcel_name": "planks",
+                    "weight": 43,
+                    "receiver_name": "joyce",
+                    "receiver_phonenumber": "8067356565",
+                    "destination": "New York",
+                    "pickup_location": "Lagos",
+                    "current_location": null,
+                    "description": null,
+                    "status": "pending",
+                    "delivered_on": null,
+                    "updated_at": null
+                },
+                {
+                    "id": "2",
+                    "sent_on": "2019-06-12T18:15:33.470Z",
+                    "placed_by": 5,
+                    "parcel_name": "",
+                    "weight": 43,
+                    "receiver_name": "joyce",
+                    "receiver_phonenumber": "8067356565",
+                    "destination": "New York",
+                    "pickup_location": "Lagos",
+                    "current_location": null,
+                    "description": null,
+                    "status": "pending",
+                    "delivered_on": null,
+                    "updated_at": null
+                }
+            ],
+            "rowCount": 2
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "message": "You have not created any parcels"
+        }
+
+## FETCH A DELIVERY ORDER [/api/v1/parcels/:id]
+
+###  A user/Admin can fetch a delivery order [GET]
+This API endpoint `/api/v1/parcels/:id` allows users to fetch a deivery order they created and admin can fetch any order from the database.
+
++ Request (application/json)
+
+    + Headers
+    
+            x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkphbmUgVWNoZSIsImVtYWlsIjoiamF5bmVAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDgkd2IwdTVsWWRNTDhPRnlqNkJDYVF5T2tXOXVKSVhOdnBnb3RaZ2hpM3ZXWnVOM3l0aldOcUciLCJpc19hZG1pbiI6bnVsbCwicmVnaXN0ZXJlZCI6IjIwMTktMDYtMTJUMTc6MjQ6MzYuNDIyWiIsImlhdCI6MTU2MDM2MTc1OCwiZXhwIjoxNTYwOTY2NTU4fQ.CS6FmLjTwxq3phFoZLB-90soHqxkHWrkqMf4WfuW1SI
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": {
+                "id": "1",
+                "sent_on": "2019-06-12T17:49:50.106Z",
+                "placed_by": 5,
+                "parcel_name": "planks",
+                "weight": 43,
+                "receiver_name": "joyce",
+                "receiver_phonenumber": "8067356565",
+                "destination": "New York",
+                "pickup_location": "Lagos",
+                "current_location": null,
+                "description": null,
+                "status": "pending",
+                "delivered_on": null,
+                "updated_at": null
+            }
+        }
+ 
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "message": "No such delivery order was created by you"
+        }
+
+## CANCEL A DELIVERY ORDER [/api/v1/parcels/:id/cancel]
+
+###  A user can cancel a delivery order [PATCH]
+This API endpoint `/api/v1/parcels/:id/cancel` allows users to cancel a deivery order that they created.
+
++ Request (application/json)
+
+    + Headers
+    
+            x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkphbmUgVWNoZSIsImVtYWlsIjoiamF5bmVAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDgkd2IwdTVsWWRNTDhPRnlqNkJDYVF5T2tXOXVKSVhOdnBnb3RaZ2hpM3ZXWnVOM3l0aldOcUciLCJpc19hZG1pbiI6bnVsbCwicmVnaXN0ZXJlZCI6IjIwMTktMDYtMTJUMTc6MjQ6MzYuNDIyWiIsImlhdCI6MTU2MDM2MTc1OCwiZXhwIjoxNTYwOTY2NTU4fQ.CS6FmLjTwxq3phFoZLB-90soHqxkHWrkqMf4WfuW1SI
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": {
+                "id": "1",
+                "sent_on": "2019-06-12T17:49:50.106Z",
+                "placed_by": 5,
+                "parcel_name": "planks",
+                "weight": 43,
+                "receiver_name": "joyce",
+                "receiver_phonenumber": "8067356565",
+                "destination": "New York",
+                "pickup_location": "Lagos",
+                "current_location": null,
+                "description": null,
+                "status": "Cancelled",
+                "delivered_on": null,
+                "updated_at": "2019-06-12T18:53:37.682Z"
+            },
+            "message": "Your parcel delivery order has been successfully cancelled"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": 400,
+            "message": "Only parcel owners can cancel their delivery order"
+        }
+        
+## UPDATE A DELIVERY ORDER [/api/v1/parcels/:id/update]
+
+###  An admin can update a delivery order [PATCH]
+This API endpoint `/api/v1/parcels/:id/update` allows the admin to update the current location and status of a deivery order.
+
++ Request (application/json)
+
+    + Headers
+    
+            x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwibmFtZSI6IkphbmUgVWNoZSIsImVtYWlsIjoiamF5bmUzNDZAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDgkaHh5L0ZQSWNMbW1NQS9yYldYTDJ6Li9hMHBrSDUvWVZ2TjhvZUtCWXpoallGVXVZcllHcHEiLCJpc19hZG1pbiI6dHJ1ZSwicmVnaXN0ZXJlZCI6IjIwMTktMDYtMTJUMTk6MDU6MzcuNDgyWiIsImlhdCI6MTU2MDM2NjMzNywiZXhwIjoxNTYwOTcxMTM3fQ.6uwuufSjOJvfxd-GVN_yWllxq5Z-rYR6h70sWmNdtNE
+    
+    + Body
+    
+            {
+                "status":"Delivered",
+                "current_location": "Lagos"
+            }
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": {
+                "id": "8",
+                "sent_on": "2019-06-12T19:04:17.053Z",
+                "placed_by": 5,
+                "parcel_name": "planks",
+                "weight": 43,
+                "receiver_name": "joyce",
+                "receiver_phonenumber": "8067356565",
+                "destination": "uyo",
+                "pickup_location": "Lagos",
+                "current_location": "Lagos",
+                "description": null,
+                "status": "Delivered",
+                "delivered_on": null,
+                "updated_at": "2019-06-12T19:06:25.038Z"
+            },
+            "message": "The parcel delivery order has been successfully updated"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": 400,
+            "message": "Only admin can update delivery order"
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "message": "No parcel with such id exist in the database"
+        }
+        
+## CHANGE DESTINATION OF A DELIVERY ORDER [/api/v1/parcels/:id/destination]
+
+###  A user can change the destination of a delivery order [PATCH]
+This API endpoint `/api/v1/parcels/:id/destination` allows users to change the destination of a deivery order that has not been acted upon by the admin.
+
++ Request (application/json)
+
+    + Headers
+    
+            x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkphbmUgVWNoZSIsImVtYWlsIjoiamF5bmVAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDgkd2IwdTVsWWRNTDhPRnlqNkJDYVF5T2tXOXVKSVhOdnBnb3RaZ2hpM3ZXWnVOM3l0aldOcUciLCJpc19hZG1pbiI6bnVsbCwicmVnaXN0ZXJlZCI6IjIwMTktMDYtMTJUMTc6MjQ6MzYuNDIyWiIsImlhdCI6MTU2MDM2MTc1OCwiZXhwIjoxNTYwOTY2NTU4fQ.CS6FmLjTwxq3phFoZLB-90soHqxkHWrkqMf4WfuW1SI
+
+    + Body
+    
+            {
+                "destination": "uyo"
+            }
+            
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": {
+                "id": "1",
+                "sent_on": "2019-06-12T17:49:50.106Z",
+                "placed_by": 5,
+                "parcel_name": "planks",
+                "weight": 43,
+                "receiver_name": "joyce",
+                "receiver_phonenumber": "8067356565",
+                "destination": "uyo",
+                "pickup_location": "Lagos",
+                "current_location": null,
+                "description": null,
+                "status": "Cancelled",
+                "delivered_on": null,
+                "updated_at": "2019-06-12T19:01:03.204Z"
+            },
+            "message": "The destination of your parcel delivery order has been successfully updated"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": 400,
+            "message": "Only parcel owners change their delivery order destination"
+        }
+
++ Response 409 (application/json)
+
+        {
+            "status": 409,
+            "message": "You can only change destination of pending orders"
+        }
+
+## SEND A MAIL TO USERS [/api/v1/auth/mail]
+
+###  An admin can send a mail on a delivery order update [POST]
+This API endpoint `/api/v1/auth/mail` allows the admin to notify users through an email on a deivery order update.
+
++ Request (application/json)
+
+    + Headers
+    
+            x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwibmFtZSI6IkphbmUgVWNoZSIsImVtYWlsIjoiamF5bmUzNDZAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDgkaHh5L0ZQSWNMbW1NQS9yYldYTDJ6Li9hMHBrSDUvWVZ2TjhvZUtCWXpoallGVXVZcllHcHEiLCJpc19hZG1pbiI6dHJ1ZSwicmVnaXN0ZXJlZCI6IjIwMTktMDYtMTJUMTk6MDU6MzcuNDgyWiIsImlhdCI6MTU2MDM2NjMzNywiZXhwIjoxNTYwOTcxMTM3fQ.6uwuufSjOJvfxd-GVN_yWllxq5Z-rYR6h70sWmNdtNE
+    
+    + Body
+    
+            {
+                "email": "onyedi@gmail.com",
+                "message": "Hello",
+                "name": "Korede "
+            }
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "message": "The mail has been sent successfully"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": 400,
+            "message": "Please, supply all the required information"
+        }

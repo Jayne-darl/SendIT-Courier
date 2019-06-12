@@ -70,6 +70,7 @@ These are the HTTP response codes used in this project.
 | `401` | The access credentials (via the Authorization header) were missing or are invalid |
 | `403` | The credentials you provided are valid, but you are not authorized to access the resource you were looking for |
 | `404` |	Returned when the request is valid, but the resource you try to access does not exist, or is outside your scope |
+| `409` | This conflict status code indicates that the request--response asked for is conflicted |
 | `500` |	This internal server error status code indicates that something has gone wrong on the web server |
 
 ## API Endpoints
@@ -81,8 +82,9 @@ These are the HTTP response codes used in this project.
 | GET /api/v1/parcels |	Fetch all parcel delivery order |
 | GET /api/v1/parcels/:id	| Fetch a specific parcel order |
 | PATCH /api/v1/parcels/:id/cancel |	Cancel a parcel delivery order |
-| PATCH /rapi/v1/ed-flags/:id/update |	Update the current location and status of a delivery order |
-| PATCH /api/v1/red-flags/:id/destination |	Update the destination a delivery order |
+| PATCH /api/v1/parcels/:id/update |	Update the current location and status of a delivery order |
+| PATCH /api/v1/parcels/:id/destination |	Update the destination a delivery order |
+| POST /api/v1/auth/mail | Send mail to users on delivery order update |
 
 
 ## Templater User Interface(UI)
@@ -90,6 +92,12 @@ https://jayne-darl.github.io/SendIT-Courier/UI/index.html
 
 ## Relevant Pivotal Tracker Stories
 https://www.pivotaltracker.com/n/projects/2323020
+
+## The API Endpints are hosted on heroku
+https://sendit-heroku-staging.herokuapp.com
+
+## The API Endpoints are documented on Apiary 
+https://senditcourier.docs.apiary.io/
 
 ## Author
 Jane U. Onwumere
