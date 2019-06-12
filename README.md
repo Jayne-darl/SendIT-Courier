@@ -91,6 +91,9 @@ https://jayne-darl.github.io/SendIT-Courier/UI/index.html
 ## Relevant Pivotal Tracker Stories
 https://www.pivotaltracker.com/n/projects/2323020
 
+## The API Endpints are hosted on heroku
+https://sendit-heroku-staging.herokuapp.com
+
 ## Author
 Jane U. Onwumere
 
