@@ -81,8 +81,9 @@ These are the HTTP response codes used in this project.
 | GET /api/v1/parcels |	Fetch all parcel delivery order |
 | GET /api/v1/parcels/:id	| Fetch a specific parcel order |
 | PATCH /api/v1/parcels/:id/cancel |	Cancel a parcel delivery order |
-| PATCH /rapi/v1/ed-flags/:id/update |	Update the current location and status of a delivery order |
-| PATCH /api/v1/red-flags/:id/destination |	Update the destination a delivery order |
+| PATCH /rapi/v1/parcels/:id/update |	Update the current location and status of a delivery order |
+| PATCH /api/v1/parcels/:id/destination |	Update the destination a delivery order |
+| POST /api/v1/auth/mail | Send mail to users on delivery order update |
 
 
 ## Templater User Interface(UI)
