@@ -12,6 +12,16 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
+//Template engine setup
+var exphbs = require('express-handlebars');
+
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+
+app.get('/', (req, res) => {
+    res.render('home');
+});
+
 app.use("/api/v1/parcels", parcelRoute);
 app.use("/api/v1/auth", authRoute);
 
