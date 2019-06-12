@@ -9,7 +9,7 @@ let router = express.Router();
 router.use(express.json());
 
 router.post("/", Auth.verifyToken, parcelController.create);
-router.get("/", Auth.verifyToken, parcelController.getAll);
+router.get("/all", Auth.verifyToken, parcelController.getAll);
 router.get("/:id", Auth.verifyToken, parcelController.getOne);
 router.patch("/:id/cancel", Auth.verifyToken, parcelController.cancel);
 router.patch("/:id/update", Auth.verifyToken, parcelController.update);

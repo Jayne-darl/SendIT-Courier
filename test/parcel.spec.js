@@ -154,7 +154,7 @@ describe("Parcel delivery order test", () => {
   describe("/GET Orders", () => {
     it("should not return orders without header token or an empty one", done => {
       Chai.request(app)
-        .get("/api/v1/parcels")
+        .get("/api/v1/parcels/all")
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property("status");
@@ -167,7 +167,7 @@ describe("Parcel delivery order test", () => {
     });
     it("should return you have not created any parcel", done => {
       Chai.request(app)
-        .get("/api/v1/parcels")
+        .get("/api/v1/parcels/all")
         .set("x-access-token", otherToken)
         .end((err, res) => {
           res.should.have.status(404);
@@ -180,7 +180,7 @@ describe("Parcel delivery order test", () => {
     });
     it("should return all parcel delivery order in the database", done => {
       Chai.request(app)
-        .get("/api/v1/parcels")
+        .get("/api/v1/parcels/all")
         .set("x-access-token", adminToken)
         .end((err, res) => {
           res.should.have.status(200);
